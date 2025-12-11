@@ -1,0 +1,23 @@
+<?php
+
+use App\Http\Controllers\CategoryArticleController;
+use App\Http\Controllers\SlideController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+// Slide route
+Route::post('/slides', [SlideController::class, 'store']);
+Route::get('/slides', [SlideController::class, 'index']);
+Route::get('/slides/{id}', [SlideController::class, 'show']);
+Route::put('/slides/{id}', [SlideController::class, 'update']);
+Route::delete('/slides/{id}', [SlideController::class, 'destroy']);
+
+// CategoryArticle route
+Route::post('/categoryarticles', [CategoryArticleController::class, 'store']);
+Route::get('/categoryarticles', [CategoryArticleController::class, 'index']);
+Route::get('/categoryarticles/{id}', [CategoryArticleController::class, 'show']);
+Route::put('/categoryarticles/{id}', [CategoryArticleController::class, 'update']);
