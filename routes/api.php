@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryArticleController;
 use App\Http\Controllers\SlideController;
 use Illuminate\Http\Request;
@@ -22,3 +23,10 @@ Route::get('/categoryarticles', [CategoryArticleController::class, 'index']);
 Route::get('/categoryarticles/{id}', [CategoryArticleController::class, 'show']);
 Route::put('/categoryarticles/{id}', [CategoryArticleController::class, 'update']);
 Route::delete('/categoryarticles/{id}', [CategoryArticleController::class, 'destroy']);
+
+// Article route
+Route::post('/articles', [ArticleController::class, 'store']);
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{id}', [ArticleController::class, 'show']);
+Route::put('/articles/{id}', [ArticleController::class, 'update']);
+Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
