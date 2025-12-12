@@ -21,3 +21,4 @@ Route::post('/categoryarticles', [CategoryArticleController::class, 'store']);
 Route::get('/categoryarticles', [CategoryArticleController::class, 'index']);
 Route::get('/categoryarticles/{id}', [CategoryArticleController::class, 'show']);
 Route::put('/categoryarticles/{id}', [CategoryArticleController::class, 'update']);
+Route::delete('/categoryarticles/{id}', [CategoryArticleController::class, 'destroy']);

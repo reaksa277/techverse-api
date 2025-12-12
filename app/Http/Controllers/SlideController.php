@@ -16,12 +16,20 @@ class SlideController extends Controller
      */
     public function index()
     {
-        $slides = Slide::all();
-        return response()->json([
-            'status' => true,
-            'message' => 'Slides retrieved successfully',
-            'data' => $slides
-        ], 200);
+        try {
+            $slides = Slide::all();
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Slides retrieved successfully',
+                'data' => $slides
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -37,28 +45,37 @@ class SlideController extends Controller
      */
     public function store(Request $request)
     {
-        $validation = Validator($request->all(), [
-            'title_en' => 'required|string|max:500',
-            'tilte_kh' => 'required|string|max:500',
-            'url' => 'required|string|max:255',
-        ]);
+        try {
 
-        if ($validation->failed()) {
-            return response()->json(
-                [
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'error' => $validation->errors()
-                ], 422
-            );
+            $validation = Validator($request->all(), [
+                'title_en' => 'required|string|max:500',
+                'tilte_kh' => 'required|string|max:500',
+                'url' => 'required|string|max:255',
+            ]);
+
+            if ($validation->failed()) {
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => 'Validation error',
+                        'error' => $validation->errors()
+                    ],
+                    422
+                );
+            }
+
+            $slide = Slide::create($request->all());
+            return response()->json([
+                'status' => true,
+                'message' => 'created slide successfullly',
+                'data' => $slide
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        $slide = Slide::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'created slide successfullly',
-            'data' => $slide
-        ], 201);
     }
 
     /**
@@ -66,20 +83,27 @@ class SlideController extends Controller
      */
     public function show(string $id)
     {
-        $slide = Slide::find($id);
+        try {
+            $slide = Slide::find($id);
 
-        if(!$slide) {
+            if (!$slide) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Slide not found with id : ' . $id,
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully get slide with id : ' . $id,
+                'data' => $slide
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Slide not found with id : '.$id,
-            ], 404);
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Successfully get slide with id : '.$id,
-            'data' => $slide
-        ],200);
     }
 
     /**
@@ -96,36 +120,44 @@ class SlideController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $validation = Validator($request->all(), [
-            'title_en' => 'required|string|max:500',
-            'tilte_kh' => 'required|string|max:500',
-            'url' => 'required|string|max:255',
-        ]);
+        try {
 
-        if ($validation->failed()) {
+            $validation = Validator($request->all(), [
+                'title_en' => 'required|string|max:500',
+                'tilte_kh' => 'required|string|max:500',
+                'url' => 'required|string|max:255',
+            ]);
+
+            if ($validation->failed()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'error' => $validation->errors()
+                ], 422);
+            }
+
+            $slide = Slide::find($id);
+
+            if (!$slide) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Slide not found with id : ' . $id,
+                ], 404);
+            }
+
+            $slide->update($request->all());
+
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully updated slide with id : ' . $id,
+                'data' => $slide
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'validation error',
-                'error' => $validation->errors()
-            ], 422);
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        $slide = Slide::find($id);
-
-        if(!$slide) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Slide not found with id : '.$id,
-            ], 404);
-        }
-
-        $slide->update($request->all());
-
-        return response()->json([
-            'status' => true,
-            'message' => 'successfully updated slide with id : '.$id,
-            'data' => $slide
-        ], 200);
     }
 
     /**
@@ -137,12 +169,12 @@ class SlideController extends Controller
 
             $slide = Slide::find($id);
 
-            Log::debug("slide info: ", ["slide"=>$slide]);
+            Log::debug("slide info: ", ["slide" => $slide]);
 
             if (!$slide) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : '.$id,
+                    'message' => 'Slide not found with id : ' . $id,
                 ], 404);
             }
 
@@ -152,7 +184,7 @@ class SlideController extends Controller
                 'status' => true,
                 'message' => 'successfully deleted slide'
             ], 204);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),

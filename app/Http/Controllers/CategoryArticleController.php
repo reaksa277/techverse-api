@@ -13,13 +13,20 @@ class CategoryArticleController extends Controller
      */
     public function index()
     {
-        $category_articles = CategoryArticle::all();
+        try {
+            $category_articles = CategoryArticle::all();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Slides retrieved successfully',
-            'data' => $category_articles
-        ], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Category Articles retrieved successfully',
+                'data' => $category_articles
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -72,20 +79,28 @@ class CategoryArticleController extends Controller
      */
     public function show(string $id)
     {
-        $category_articles = CategoryArticle::find($id);
+        try {
 
-        if (!$category_articles) {
+            $category_articles = CategoryArticle::find($id);
+
+            if (!$category_articles) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Category Article not found with id : ' . $id,
+                ], 404);
+            }
+
             return response()->json([
                 'status' => false,
-                'message' => 'Category Article not found with id : ' . $id,
-            ], 404);
+                'message' => 'Successfully retrieved Category Article with id : ' . $id,
+                'data' => $category_articles
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Successfully retrieved Category Article with id : ' . $id,
-            'data' => $category_articles
-        ], 200);
     }
 
     /**
@@ -119,8 +134,20 @@ class CategoryArticleController extends Controller
 
             $category_articles = CategoryArticle::find($id);
 
+            if (!$category_articles) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Category Article not found with id : ' . $id,
+                ], 404);
+            }
+
             $category_articles->update($request->all());
-            
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Category Article updated successfully',
+                'data' => $category_articles
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -134,6 +161,27 @@ class CategoryArticleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $category_articles = CategoryArticle::find($id);
+
+            if (!$category_articles) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Category Article not found with id : ' . $id,
+                ], 404);
+            }
+
+            $category_articles->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Category Article deleted successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }
