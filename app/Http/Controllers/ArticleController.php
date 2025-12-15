@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Articles;
+use App\Models\CategoryArticle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,6 +15,7 @@ class ArticleController extends Controller
     public function index()
     {
         try {
+
             $articles = Articles::all();
 
             return response()->json([
@@ -61,12 +63,16 @@ class ArticleController extends Controller
                 ], 422);
             }
 
-            $article = Articles::create($request->all());
+            $data = $request->all();
+            $data['slug_en'] = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\ \  \|\\\]/", '-', strtolower($data['title_en']));
+            $data['slug_kh'] = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\ \  \|\\\]/", '-', strtolower($data['title_kh']));
+
+            Articles::create($data);
 
             return response()->json([
                 'status' => true,
                 'message' => 'Article created successfully',
-                'data' => $article
+                'data' => $data
             ], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred while creating the article.', 'message' => $e->getMessage()], 500);

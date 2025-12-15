@@ -14,11 +14,20 @@ class Articles extends Model
     protected $fillable = [
         'title_en',
         'title_kh',
+        'slug_en',
+        'slug_kh',
         'description_en',
         'description_kh',
         'info_en',
         'info_kh',
         'status',
+        'url',
+        'image',
         'category_id'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryArticle::class, 'category_id');
+    }
 }
