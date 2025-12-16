@@ -18,6 +18,7 @@ class CategoryArticle extends Model
         'description_kh',
         'url',
         'type',
-        'status'
+        'status',
+        'image',
     ];
 }
