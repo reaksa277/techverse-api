@@ -47,7 +47,6 @@ class CategoryArticleController extends Controller
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
                 'title_kh' => 'required|string|max:500',
-                'url' => 'required|string|max:255',
                 'type' => 'required|string|max:255',
             ]);
 
@@ -119,9 +118,7 @@ class CategoryArticleController extends Controller
         try {
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
-                'title_kh' => 'required|string|max:500',
-                'url' => 'required|string|max:255',
-                'type' => 'required|string|max:255',
+                'title_kh' => 'required|string|max:500'
             ]);
 
             if ($validation->failed()) {
