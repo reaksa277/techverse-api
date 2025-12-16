@@ -23,7 +23,8 @@ class Articles extends Model
         'status',
         'url',
         'image',
-        'category_id'
+        'category_id',
+        'tag',
     ];
 
     public function category()
