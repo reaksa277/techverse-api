@@ -11,6 +11,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::prefix('v1')->group(function () {
+    require __DIR__.'/api/v1.php';
+});
+
+
 // Slide route
 Route::post('/slides', [SlideController::class, 'store']);
 Route::get('/slides', [SlideController::class, 'index']);
@@ -32,5 +37,3 @@ Route::get('/articles/{id}', [ArticleController::class, 'show']);
 Route::put('/articles/{id}', [ArticleController::class, 'update']);
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
-// HomePage route
-Route::get('/homepage/services', [HomePageController::class, 'getServices']);
