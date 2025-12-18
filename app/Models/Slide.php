@@ -18,6 +18,7 @@ class Slide extends Model
         'description_kh',
         'url',
         'image',
-        'status'
+        'status',
+        'type',
     ];
 }

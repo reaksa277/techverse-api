@@ -102,4 +102,25 @@ class HomePageController extends Controller
             ]);
         }
     }
+
+    public function getAdvertisement() {
+        try {
+
+            $sql = "select * from slides s
+                    where s.type = 'advertisement';";
+
+            $advertisement = DB::select($sql);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Advertisement retrieved successfully',
+                'data' => $advertisement,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
 }

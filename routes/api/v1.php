@@ -9,6 +9,7 @@ Route::get('/homepage/services', [HomePageController::class, 'getServices']);
 Route::get('/homepage/blogs', [HomePageController::class, 'getBlogs']);
 Route::get('/homepage/case-studies', [HomePageController::class, 'getCaseStudies']);
 Route::get('/detail-articles/{id}', [HomePageController::class, 'getDetailArticle']);
+Route::get('/homepage/advertisement', [HomePageController::class, 'getAdvertisement']);
 
 // BlogPage route
 Route::get('/blogs', [BlogPageController::class, 'getAllBlogs']);
