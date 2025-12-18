@@ -8,4 +8,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/homepage/services', [HomePageController::class, 'getServices']);
 Route::get('/homepage/blogs', [HomePageController::class, 'getBlogs']);
 Route::get('/homepage/case-studies', [HomePageController::class, 'getCaseStudies']);
-Route::get('/articles/{id}', [ArticleController::class, 'show']);
+Route::get('/detail-articles/{id}', [HomePageController::class, 'getDetailArticle']);

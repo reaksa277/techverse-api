@@ -17,7 +17,7 @@ class HomePageController extends Controller
 
             $services = DB::select($sql);
             foreach ($services as $service) {
-                $service->category_image = asset( $service->category_image);
+                $service->category_image = asset($service->category_image);
             }
             return response()->json([
                 'status' => true,
@@ -32,15 +32,16 @@ class HomePageController extends Controller
         }
     }
 
-    public function getBlogs() {
+    public function getBlogs()
+    {
         try {
             $sql = "select a.* from articles a
                     join category_articles ca on a.category_id = ca.id
-                    where ca.type = 'blogs' and a.deleted_at is null and a.status = 'active' and ca.deleted_at is null;";
+                    where ca.type = 'blogs' and a.deleted_at is null and a.status = 'active' and ca.deleted_at is null limit 3;";
 
             $blogs = DB::select($sql);
             foreach ($blogs as $blog) {
-                $blog->image = asset( $blog->image);
+                $blog->image = asset($blog->image);
             }
             return response()->json([
                 'status' => true,
@@ -55,7 +56,31 @@ class HomePageController extends Controller
         }
     }
 
-    public function getCaseStudies() {
+    public function getDetailArticle(string $id)
+    {
+        try {
+            $sql = "select a.* from articles a where id = $id";
+
+            $detail_articles = DB::select($sql);
+            foreach ($detail_articles as $detail_article) {
+                $detail_article->image = asset($detail_article->image);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Blogs retrieved successfully',
+                'data' => $detail_article
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function getCaseStudies()
+    {
         try {
             $sql = "select a.* from articles a
                     join category_articles ca on a.category_id = ca.id
@@ -63,7 +88,7 @@ class HomePageController extends Controller
 
             $caseStudies = DB::select($sql);
             foreach ($caseStudies as $caseStudy) {
-                $caseStudy->image = asset( $caseStudy->image);
+                $caseStudy->image = asset($caseStudy->image);
             }
             return response()->json([
                 'status' => true,
