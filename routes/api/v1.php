@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TechVerse\BlogPageController;
+use App\Http\Controllers\TechVerse\CaseStudyController;
 use App\Http\Controllers\TechVerse\HomePageController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,3 +14,6 @@ Route::get('/homepage/advertisement', [HomePageController::class, 'getAdvertisem
 
 // BlogPage route
 Route::get('/blogs', [BlogPageController::class, 'getAllBlogs']);
+
+// Case studies route
+Route::get('/case-studies', [CaseStudyController::class, 'getCaseStudies']);

@@ -84,7 +84,7 @@ class HomePageController extends Controller
         try {
             $sql = "select a.* from articles a
                     join category_articles ca on a.category_id = ca.id
-                    where ca.type = 'case_study' and a.deleted_at is null and a.status = 'active' and ca.deleted_at is null;";
+                    where ca.type = 'case_study' and a.deleted_at is null and a.status = 'active' and ca.deleted_at is null limit 1;";
 
             $caseStudies = DB::select($sql);
             foreach ($caseStudies as $caseStudy) {
