@@ -3,7 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryArticleController;
 use App\Http\Controllers\SlideController;
-use App\Http\Controllers\TechVerse\HomePageController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +37,5 @@ Route::get('/articles/{id}', [ArticleController::class, 'show']);
 Route::put('/articles/{id}', [ArticleController::class, 'update']);
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
+# DashboardBackend
+Route::get('/admin/dashboard', [DashboardController::class, 'view']);
