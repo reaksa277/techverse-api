@@ -38,4 +38,5 @@ Route::put('/articles/{id}', [ArticleController::class, 'update']);
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
 # DashboardBackend
-Route::get('/admin/dashboard', [DashboardController::class, 'view']);
+Route::get('/admin/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
+Route::get('/admin/slides', [SlideController::class, 'view'])->name('admin.slides');

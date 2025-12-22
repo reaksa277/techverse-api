@@ -30,6 +30,10 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('dashboard/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('dashboard/css/style-preset.css') }}">
+    <!-- DataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css" />
+    {{-- jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 
 </head>
 <!-- [Head] end -->
@@ -76,8 +80,8 @@
     <script src="{{ asset('dashboard/js/pcoded.js') }}"></script>
     <script src="{{ asset('dashboard/js/plugins/feather.min.js') }}"></script>
 
-
-
+    <!-- DataTable -->
+    <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
 
 
     <script>
@@ -107,7 +111,7 @@
         font_change("Public-Sans");
     </script>
 
-
+    @yield('script')
 
 </body>
 <!-- [Body] end -->

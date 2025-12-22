@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Slide;
-use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -11,14 +10,67 @@ use function Laravel\Prompts\error;
 
 class SlideController extends Controller
 {
+    public function getDataTable(Request $request)
+    {
+        try {
+            $query = Slide::query()
+                ->where('deleted_at', '=', null);
+
+            // Search
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $searchValue = $request->search['value'];
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('slides.title_kh', 'like', "%$searchValue%")
+                        ->orWhere('slides.title_en', 'like', "%$searchValue%");
+                });
+            }
+
+            $total = $query->count();
+            $req_order = $request->order;
+
+            // Sorting
+            if (isset($req_order)) {
+                $sortColumn = $request->columns[$req_order[0]['column']]['name'];
+                $sortDirection = $req_order[0]['dir'];
+                if ($sortColumn && $sortDirection) {
+                    $query->orderBy($sortColumn, $sortDirection);
+                }
+            }
+
+            // Pagination
+            $start = $request->input('start', 0);
+            $length = $request->input('length', 10);
+            $query->skip($start)->take($length);
+
+            $data = $query->get();
+
+            return [
+                'draw' => $request->input('draw', 1),
+                'recordsTotal' => $total,
+                'recordsFiltered' => $total,
+                'data' => $data
+            ];
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+    public function view()
+    {
+        return view('Admin.AdminMenu.Slides.index');
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $slides = Slide::all();
-            
+            $slides = $this->getDataTable($request);
+
+            Log::debug("slide info: ", ["slide"=>$slides]);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Slides retrieved successfully',
