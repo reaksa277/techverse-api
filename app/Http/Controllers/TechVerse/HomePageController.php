@@ -7,6 +7,29 @@ use Illuminate\Support\Facades\DB;
 
 class HomePageController extends Controller
 {
+    public function getSlides()
+    {
+        try {
+
+            $sql = "select * from slides s
+                    where s.type = 'banner';";
+
+            $slides = DB::select($sql);
+            foreach ($slides as $slide) {
+                $slide->image = asset($slide->image);
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Services retrieved successfully',
+                'data' => $slides
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
     public function getServices()
     {
         try {
@@ -103,7 +126,8 @@ class HomePageController extends Controller
         }
     }
 
-    public function getAdvertisement() {
+    public function getAdvertisement()
+    {
         try {
 
             $sql = "select * from slides s
