@@ -18,7 +18,7 @@ Route::prefix('v1')->group(function () {
 
 // Slide route
 Route::post('/slides', [SlideController::class, 'store']);
-Route::get('/slides', [SlideController::class, 'index']);
+Route::get('/slides', [SlideController::class, 'index'])->name('slides.get-data');
 Route::get('/slides/{id}', [SlideController::class, 'show']);
 Route::put('/slides/{id}', [SlideController::class, 'update']);
 Route::delete('/slides/{id}', [SlideController::class, 'destroy']);

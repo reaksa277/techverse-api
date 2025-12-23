@@ -13,27 +13,32 @@ class SlideController extends Controller
     public function getDataTable(Request $request)
     {
         try {
-            $query = Slide::query()
-                ->where('deleted_at', '=', null);
+            $baseQuery = Slide::whereNull('deleted_at');
+
+            $recordsTotal = $baseQuery->count();
+
+            $query = clone $baseQuery;
 
             // Search
             if ($request->has('search') && !empty($request->search['value'])) {
                 $searchValue = $request->search['value'];
                 $query->where(function ($q) use ($searchValue) {
-                    $q->where('slides.title_kh', 'like', "%$searchValue%")
-                        ->orWhere('slides.title_en', 'like', "%$searchValue%");
+                    $q->where('title_kh', 'like', "%$searchValue%")
+                        ->orWhere('title_en', 'like', "%$searchValue%");
                 });
             }
 
-            $total = $query->count();
-            $req_order = $request->order;
+            $recordsFiltered = $query->count();
 
             // Sorting
-            if (isset($req_order)) {
-                $sortColumn = $request->columns[$req_order[0]['column']]['name'];
-                $sortDirection = $req_order[0]['dir'];
-                if ($sortColumn && $sortDirection) {
-                    $query->orderBy($sortColumn, $sortDirection);
+            if ($request->has('order')) {
+                $orderColumnIndex = $request->order[0]['column'];
+                $orderDirection   = $request->order[0]['dir'];
+
+                $orderColumn = $request->columns[$orderColumnIndex]['data'];
+
+                if (!empty($orderColumn)) {
+                    $query->orderBy($orderColumn, $orderDirection);
                 }
             }
 
@@ -46,15 +51,17 @@ class SlideController extends Controller
 
             return [
                 'draw' => $request->input('draw', 1),
-                'recordsTotal' => $total,
-                'recordsFiltered' => $total,
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
                 'data' => $data
             ];
         } catch (\Exception $e) {
             return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+                'draw' => intval($request->draw),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => [],
+            ], 500);
         }
     }
     public function view()
@@ -69,13 +76,7 @@ class SlideController extends Controller
         try {
             $slides = $this->getDataTable($request);
 
-            Log::debug("slide info: ", ["slide"=>$slides]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Slides retrieved successfully',
-                'data' => $slides
-            ], 200);
+            return response()->json($slides);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

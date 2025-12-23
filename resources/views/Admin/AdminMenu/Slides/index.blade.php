@@ -37,13 +37,13 @@
                                     <thead>
                                         <tr>
                                             <th class="text-end">#</th>
+                                            <th>Image</th>
                                             <th>Title_en</th>
                                             <th>Title_kh</th>
-                                            <th>Descpition_en</th>
-                                            <th>Descpition_kh</th>
-                                            <th class="text-end">Image</th>
-                                            <th class="text-end">Type</th>
-                                            <th>Created At</th>
+                                            <th>Descprition_en</th>
+                                            <th>Descprition_kh</th>
+                                            <th>Type</th>
+                                            <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -62,8 +62,8 @@
 
     <script>
         {
-            $(document).ready(() => {
-                getData();
+            $(document).ready(function() {
+                dataList();
             });
 
             function create() {
@@ -71,28 +71,32 @@
                 console.log("open model");
             }
 
-            function getData() {
-                $.ajax({
-                    url: "/api/slides",
-                    type: "GET",
-                    success: function(response) {
-                        console.log("get slide: ", response.data);
-                        dataList(response.data)
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-
             // datatable data
-            function dataList(data) {
+            function dataList() {
                 var cols = [{
                         'data': 'id',
                         'name': 'id',
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
+                        render: function(id, type, row) {
+                            return id;
+                        }
+                    },
+                    {
+                        'data': 'image',
+                        'name': 'image',
+                        'searchable': false,
+                        'orderable': false,
+                        'visible': true,
+                        render: function(img) {
+                            return `
+                                <img
+                                src="/api/storage/images/user/${img}"
+                                width="80"
+                                >
+                            `;
+                        }
                     },
                     {
                         'data': 'title_en',
@@ -100,6 +104,10 @@
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
+                        render: function(title_en, type, row) {
+                            return title_en ? title_en :
+                                `<span class="text-body-tertiary">N/A</span>`;
+                        }
                     },
                     {
                         'data': 'title_kh',
@@ -107,6 +115,10 @@
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
+                        render: function(title_kh, type, row) {
+                            return title_kh ? title_kh :
+                                `<span class="text-body-tertiary">N/A</span>`;
+                        }
                     },
                     {
                         'data': 'description_en',
@@ -114,23 +126,20 @@
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
+                        render: function(description_en, type, row) {
+                            return description_en ? description_en :
+                                `<span class="text-body-tertiary">N/A</span>`;
+                        }
                     },
                     {
                         'data': 'description_kh',
                         'name': 'description_kh',
-                        'searchable': true,
+                        'searchable': false,
                         'orderable': true,
                         'visible': true,
-                    },
-                    {
-                        'data': 'image',
-                        'name': 'image',
-                        'searchable': true,
-                        'orderable': true,
-                        'visible': true,
-                        render: function(thumbnail, type, row) {
-
-                            return `<img src="${thumbnail}" alt="thumbnail" width="80px">`;
+                        render: function(description_kh, type, row) {
+                            return description_kh ? description_kh :
+                                `<span class="text-body-tertiary">N/A</span>`;
                         }
                     },
                     {
@@ -141,25 +150,43 @@
                         'visible': true,
                     },
                     {
-                        'data': 'created_at',
-                        'name': 'created_at',
-                        'searchable': true,
-                        'orderable': true,
-                        'visible': true,
-                        render: function(created_at, type, row) {
-                            return moment(created_at).format('DD-MMM-YYYY');
+                        "data": null,
+                        "name": "Action",
+                        "searchable": false,
+                        "orderable": false,
+                        "visible": true,
+                        "class": "dt-center",
+                        render: function(data, type, row, meta) {
+
+                            var str =
+                                '<div class="dropdown">' +
+                                '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fal fa-cog" aria-hidden="true"></i></button>' +
+                                '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
+                                '<a class="dropdown-item" href="javascript:void(0);" onclick="edit(' + row.id +
+                                ')"> <i class="fal fa-pencil" aria-hidden="true"></i> Edit</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0);" onclick="destroy(' + row
+                                .id +
+                                ')"> <i class="fal fa-trash" aria-hidden="true"></i> Remove</a>' +
+                                '</div>' +
+                                '</div>';
+                            return str;
+
                         }
+
                     },
 
                 ];
-                $('#datalist').DataTable().destroy();
+                if ($.fn.DataTable.isDataTable('#datalist')) {
+                    $('#datalist').DataTable().clear();
+                    $('#datalist').DataTable().destroy();
+                }
 
                 //////INT TABLE//////
                 $('#datalist').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ url('api/slides') }}",
+                        url: "{{ route('slides.get-data') }}",
                         type: 'GET',
                         data: function(d) {
                             d.draw = d.draw;
@@ -173,14 +200,13 @@
                         },
                         error: function(xhr, error, thrown) {
                             // Handle error if needed
-                            console.log('ERR');
+                            console.error('ERR');
                         }
                     },
                     columns: cols,
                 });
                 //////INT TABLE//////
             }
-
         }
     </script>
 @endsection

@@ -17,7 +17,7 @@
                 </div>
                 <div class="text-center mt-3">
                   <div class="chat-avtar d-inline-flex mx-auto">
-                    <img class="img-fluid" src="../assets/images/application/prod-img-5.png"
+                    {{-- <img class="img-fluid" src="../assets/images/application/prod-img-5.png" --}}
                       alt="User image">
                   </div>
                 </div>
