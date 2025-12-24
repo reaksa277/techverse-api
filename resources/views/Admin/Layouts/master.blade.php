@@ -1,119 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- [Head] start -->
-
 <head>
     <title>Home | Mantis Bootstrap 5 Admin Template</title>
-    <!-- [Meta] -->
+
+    <!-- Meta -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description"
-        content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
-    <meta name="keywords"
-        content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
-    <meta name="author" content="CodedThemes">
 
-    <!-- [Favicon] icon -->
-    <link rel="icon" href="../assets/images/favicon.svg" type="image/x-icon"> <!-- [Google Font] Family -->
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('dashboard/images/favicon.svg') }}" type="image/x-icon">
+
+    <!-- Google Font -->
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-        id="main-font-link">
-    <!-- [Tabler Icons] https://tablericons.com -->
+          href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="{{ asset('dashboard/fonts/tabler-icons.min.css') }}">
-    <!-- [Feather Icons] https://feathericons.com -->
     <link rel="stylesheet" href="{{ asset('dashboard/fonts/feather.css') }}">
-    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
     <link rel="stylesheet" href="{{ asset('dashboard/fonts/fontawesome.css') }}">
-    <!-- [Material Icons] https://fonts.google.com/icons -->
     <link rel="stylesheet" href="{{ asset('dashboard/fonts/material.css') }}">
-    <!-- [Template CSS Files] -->
-    <link rel="stylesheet" href="{{ asset('dashboard/css/style.css') }}" id="main-style-link">
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="{{ asset('dashboard/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard/css/style-preset.css') }}">
-    <!-- DataTable -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css" />
-    {{-- jquery --}}
-    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css">
+
+    <!-- Summernote (Bootstrap 4 compatible – WORKS with BS5) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+
+    <!-- jQuery (MUST be first) -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
-<!-- [Head] end -->
-<!-- [Body] Start -->
 
-<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
-    <!-- [ Pre-loader ] start -->
-    <div class="loader-bg">
-        <div class="loader-track">
-            <div class="loader-fill"></div>
-        </div>
+<body data-pc-preset="preset-1" data-pc-theme="light">
+
+<!-- Pre-loader -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
     </div>
-    <!-- [ Pre-loader ] End -->
-    <!-- [ Sidebar Menu ] start -->
-    <nav class="pc-sidebar">
-        @include('Admin.Layouts.sidebarmenu')
-    </nav>
-    <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
-    <header class="pc-header">
-        <div class="header-wrapper">
-            @include('Admin.Layouts.header')
-        </div>
-    </header>
-    <!-- [ Header ] end -->
+</div>
 
+<!-- Sidebar -->
+<nav class="pc-sidebar">
+    @include('Admin.Layouts.sidebarmenu')
+</nav>
 
+<!-- Header -->
+<header class="pc-header">
+    <div class="header-wrapper">
+        @include('Admin.Layouts.header')
+    </div>
+</header>
 
-    <!-- [ Main Content ] start -->
-    @yield('content')
-    <!-- [ Main Content ] end -->
-    <footer class="pc-footer">
-        @include('Admin.Layouts.footer')
-    </footer>
+<!-- Main Content -->
+@yield('content')
 
-    <!-- [Page Specific JS] start -->
-    <script src="{{ asset('dashboard/js/plugins/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('../dashboard/js/pages/dashboard-default.js') }}"></script>
-    <!-- [Page Specific JS] end -->
-    <!-- Required Js -->
-    <script src="{{ asset('dashboard/js/plugins/popper.min.js') }}"></script>
-    <script src="{{ asset('dashboard/js/plugins/simplebar.min.js') }}"></script>
-    <script src="{{ asset('dashboard/js/plugins/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('dashboard/js/fonts/custom-font.js') }}"></script>
-    <script src="{{ asset('dashboard/js/pcoded.js') }}"></script>
-    <script src="{{ asset('dashboard/js/plugins/feather.min.js') }}"></script>
+<!-- Footer -->
+<footer class="pc-footer">
+    @include('Admin.Layouts.footer')
+</footer>
 
-    <!-- DataTable -->
-    <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
+<!-- ===================== SCRIPTS ===================== -->
 
+<!-- Bootstrap 5 (ONLY ONE) -->
+<script src="{{ asset('dashboard/js/plugins/popper.min.js') }}"></script>
+<script src="{{ asset('dashboard/js/plugins/bootstrap.min.js') }}"></script>
 
-    <script>
-        layout_change('light');
-    </script>
+<!-- Core JS -->
+<script src="{{ asset('dashboard/js/plugins/simplebar.min.js') }}"></script>
+<script src="{{ asset('dashboard/js/fonts/custom-font.js') }}"></script>
+<script src="{{ asset('dashboard/js/pcoded.js') }}"></script>
+<script src="{{ asset('dashboard/js/plugins/feather.min.js') }}"></script>
 
+<!-- ApexCharts -->
+<script src="{{ asset('dashboard/js/plugins/apexcharts.min.js') }}"></script>
 
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
 
+<!-- Sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        change_box_container('false');
-    </script>
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 
-
-
-    <script>
-        layout_rtl_change('false');
-    </script>
-
-
-    <script>
-        preset_change("preset-1");
-    </script>
-
-
-    <script>
-        font_change("Public-Sans");
-    </script>
-
-    @yield('script')
+<!-- Page-specific scripts -->
+@yield('script')
 
 </body>
-<!-- [Body] end -->
-
 </html>
+<script>
+    $(document).ready(function() {
+        $('.summernote').summernote();
+    });
+    layout_change('light');
+    change_box_container('false');
+    layout_rtl_change('false');
+    preset_change('preset-1');
+    font_change('Public-Sans');
+    
+    function unblockagePage() {
+        $(document).ajaxStop($.unblockUI);
+    }
+</script>

@@ -19,11 +19,29 @@
                 <i class="ti ti-dashboard"></i>
             </li>
             <li class="pc-item">
-                <a href="{{ route('admin.slides') }}" class="pc-link">
+                <a href="{{ route('admin.slides') }}" class="pc-link" onclick="viewCarousel()">
                     <span class="pc-micon"><i class="ti ti-picture-in-picture"></i></span>
-                    <span class="pc-mtext">Slides</span>
+                    <span class="pc-mtext">Carousel</span>
                 </a>
             </li>
         </ul>
     </div>
 </div>
+
+<script>
+    // Article
+    function viewCarousel() {
+        $.ajax({
+            url: "{{ route('admin.slides') }}",
+            type: "GET",
+            success: function(response) {
+                $('#containerDiv').html(response);
+                unblockagePage();
+            },
+            error: function(xhr) {
+                Msg('Error GET controller", "error');
+                unblockagePage();
+            }
+        });
+    }
+</script>

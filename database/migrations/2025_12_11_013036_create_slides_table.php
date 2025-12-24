@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title_kh', 500);
             $table->text('description_en')->nullable();
             $table->text('description_kh')->nullable();
-            $table->string('url', 255);
+            $table->string('url', 255)->nullable();
             $table->string('image')->nullable();
             $table->string('status', 255)->default('active');
             $table->softDeletes();

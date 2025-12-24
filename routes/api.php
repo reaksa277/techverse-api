@@ -17,7 +17,7 @@ Route::prefix('v1')->group(function () {
 
 
 // Slide route
-Route::post('/slides', [SlideController::class, 'store']);
+Route::post('/slides', [SlideController::class, 'store'])->name('slides.add');
 Route::get('/slides', [SlideController::class, 'index'])->name('slides.get-data');
 Route::get('/slides/{id}', [SlideController::class, 'show']);
 Route::put('/slides/{id}', [SlideController::class, 'update']);
@@ -40,3 +40,4 @@ Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 # DashboardBackend
 Route::get('/admin/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
 Route::get('/admin/slides', [SlideController::class, 'view'])->name('admin.slides');
+Route::get('/admin/slides/create', [SlideController::class, 'create'])->name('slides.create');

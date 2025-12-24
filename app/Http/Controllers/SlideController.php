@@ -24,7 +24,8 @@ class SlideController extends Controller
                 $searchValue = $request->search['value'];
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('title_kh', 'like', "%$searchValue%")
-                        ->orWhere('title_en', 'like', "%$searchValue%");
+                        ->orWhere('title_en', 'like', "%$searchValue%")
+                        ->orWhere('type', 'like', "%$searchValue%");
                 });
             }
 
@@ -90,7 +91,7 @@ class SlideController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.AdminMenu.Slides.form');
     }
 
     /**
@@ -99,29 +100,28 @@ class SlideController extends Controller
     public function store(Request $request)
     {
         try {
-
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
                 'tilte_kh' => 'required|string|max:500',
-                'url' => 'required|string|max:255',
             ]);
 
             if ($validation->failed()) {
                 return response()->json(
                     [
-                        'status' => false,
-                        'message' => 'Validation error',
-                        'error' => $validation->errors()
+                        'status' => 'error',
+                        'icon' => 'error',
+                        'result' => $validation->getMessageBag(),
                     ],
                     422
                 );
             }
 
-            $slide = Slide::create($request->all());
+            Slide::create($request->all());
             return response()->json([
-                'status' => true,
+                'status' => 'success',
+                'icon' => 'success',
                 'message' => 'created slide successfullly',
-                'data' => $slide
+                'data' => $this->getDataTable($request),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([

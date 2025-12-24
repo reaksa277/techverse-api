@@ -10,11 +10,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Slides</h5>
+                                <h5 class="m-b-10">Carousel</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Slides</li>
+                                <li class="breadcrumb-item" aria-current="page">Carousel</li>
                             </ul>
                         </div>
                     </div>
@@ -28,9 +28,9 @@
                     <div class="card table-card">
                         <div class="card-body">
                             <div class="text-end p-4 pb-0">
-                                <button class="btn btn-primary" onclick="create()">
+                                <a class="btn btn-primary" href="{{ route('slides.create') }}">
                                     <i class="ti ti-plus f-18"></i> Add Slide
-                                </button>
+                                </a>
                             </div>
                             <div class="table-responsive">
                                 <table id="datalist" class="table table-hover table-striped w-100">
@@ -58,18 +58,12 @@
             <!-- [ Main Content ] end -->
         </div>
     </div>
-    @include('Admin.AdminMenu.Slides.form')
 
     <script>
         {
             $(document).ready(function() {
                 dataList();
             });
-
-            function create() {
-                // $('#formModal').modal();
-                console.log("open model");
-            }
 
             // datatable data
             function dataList() {
@@ -89,13 +83,10 @@
                         'searchable': false,
                         'orderable': false,
                         'visible': true,
-                        render: function(img) {
-                            return `
-                                <img
-                                src="/api/storage/images/user/${img}"
-                                width="80"
-                                >
-                            `;
+                        render: function(image, type, row) {
+                            return image ?
+                                `<img src="/api/storage/images/${image}" width="80" style="border-radius: 8px">` :
+                                '';
                         }
                     },
                     {
