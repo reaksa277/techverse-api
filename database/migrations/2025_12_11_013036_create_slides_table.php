@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description_kh')->nullable();
             $table->string('url', 255)->nullable();
             $table->string('image')->nullable();
-            $table->string('status', 255)->default('active');
+            $table->string('status', 255)->default('1');
             $table->softDeletes();
             $table->timestamps();
         });

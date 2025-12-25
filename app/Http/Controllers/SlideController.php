@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\error;
 
@@ -13,7 +14,7 @@ class SlideController extends Controller
     public function getDataTable(Request $request)
     {
         try {
-            $baseQuery = Slide::whereNull('deleted_at');
+            $baseQuery = Slide::whereNull('deleted_at')->where('status', 1);
 
             $recordsTotal = $baseQuery->count();
 
@@ -103,6 +104,7 @@ class SlideController extends Controller
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
                 'tilte_kh' => 'required|string|max:500',
+                'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
             if ($validation->failed()) {
@@ -116,7 +118,16 @@ class SlideController extends Controller
                 );
             }
 
-            Slide::create($request->all());
+            $data = $request->all();
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $data['image'] = $imagePath;
+            }
+            $slide = Slide::create($data);
+
+            $slide->image = $slide->image ? asset('storage/' . $slide->image) : null;
+
             return response()->json([
                 'status' => 'success',
                 'icon' => 'success',

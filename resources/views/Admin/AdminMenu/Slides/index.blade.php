@@ -85,7 +85,7 @@
                         'visible': true,
                         render: function(image, type, row) {
                             return image ?
-                                `<img src="/api/storage/images/${image}" width="80" style="border-radius: 8px">` :
+                                `<img src="/storage/${image}" width="80" style="border-radius: 8px">` :
                                 '';
                         }
                     },

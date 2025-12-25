@@ -27,83 +27,107 @@
             {{-- Tap menu --}}
             <div class="panel-container show">
                 <div class="panel-content">
-                    <ul class="nav nav-pills justify-content-end" role="tablist">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="javascript:;"
-                                onclick="chooseLanguage('kh')">Khmer</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="javascript:;"
-                                onclick="chooseLanguage('en')">English</a></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- [ Main Content ] start -->
-            <div class="row">
-                <!-- [ sample-page ] start -->
-                <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">
                             <form id="slideForm" enctype="multipart/form-data">
                                 @csrf
-                                <div class="row">
-                                    <div class="col-md-6">
+                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                                            data-bs-target="#pills-home" type="button" role="tab"
+                                            aria-controls="pills-home" aria-selected="true">English</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                                            data-bs-target="#pills-profile" type="button" role="tab"
+                                            aria-controls="pills-profile" aria-selected="false">Khmer</button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                        aria-labelledby="pills-home-tab" tabindex="0">
                                         <div class="card">
                                             <div class="card-body">
-                                                <div class="form-group">
-                                                    <label class="form-label">Title-en <span
-                                                            class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" id="title_en"
-                                                        name="title_en" placeholder="Enter Title-en" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label" for="descriptionEn">Description-en</label>
-                                                    <textarea id="description_en" name="description_en" class="summernote"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">Type</label>
-                                                    <select class="form-select" id="type" name="type">
-                                                        <option value="carousel">Carousel</option>
-                                                        <option value="advertisement">Advertisement</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">Url</label>
-                                                    <input type="text" class="form-control" id="url" name="url"
-                                                        placeholder="Enter url">
-                                                </div>
-                                                <div class="form-check form-switch d-flex align-items-center p-0">
-                                                    <label class="form-check-label h5 pe-3 mb-0"
-                                                        for="active">Active</label>
-                                                    <input class="form-check-input h4 m-0 position-relative flex-shrink-0"
-                                                        type="checkbox" id="status" name="status" checked="">
+                                                <div class="language_en" id="language_en">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Title-en <span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="title_en"
+                                                            name="title_en" placeholder="Enter Title-en" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="descriptionEn">Description-en</label>
+                                                        <textarea id="description_en" name="description_en" class="summernote"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="tab-pane fade" id="pills-profile" role="tabpanel"
+                                        aria-labelledby="pills-profile-tab" tabindex="0">
                                         <div class="card">
                                             <div class="card-body">
-                                                <div class="form-group">
-                                                    <label class="form-label">Title-kh <span
-                                                            class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" id="title_kh"
-                                                        name="title_kh" placeholder="Enter Title-kh" required>
+                                                <div class="language_kh" id="language_kh">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Title-kh <span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="title_kh"
+                                                            name="title_kh" placeholder="Enter Title-kh" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="descriptionEn">Description-kh</label>
+                                                        <textarea id="description_kh" name="description_kh" class="summernote"></textarea>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="form-label" for="descriptionEn">Description-kh</label>
-                                                    <textarea id="description_kh" name="description_kh" class="summernote"></textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Type</label>
+                                                        <select class="form-select" id="type" name="type">
+                                                            <option value="carousel">Carousel</option>
+                                                            <option value="advertisement">Advertisement</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Url</label>
+                                                        <input type="text" class="form-control" id="url"
+                                                            name="url" placeholder="Enter url">
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center p-0">
+                                                        <label class="form-check-label h5 pe-3 mb-0"
+                                                            for="active">Active</label>
+                                                        <input
+                                                            class="form-check-input h4 m-0 position-relative flex-shrink-0"
+                                                            type="checkbox" id="status" name="status"
+                                                            checked="">
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <p><span class="text-danger">*</span> Carousel Picture</p>
-                                                    <label class="btn btn-outline-secondary" for="flupld"><i
-                                                            class="ti ti-upload me-2"></i> Click to Upload</label>
-                                                    <input type="file" id="flupld" class="d-none">
-                                                    <img src="" alt="thumbnail" id="showThumbnail"
-                                                        style="margin-top:15px;max-height:100px;">
-                                                </div>
-                                                <div class="text-end btn-page mb-0 mt-4">
-                                                    <button class="btn btn-outline-secondary">Cancel</button>
-                                                    <button type="button" class="btn btn-primary" onclick="save()">Add
-                                                        new
-                                                        Carousel</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <p><span class="text-danger">*</span> Carousel Picture</p>
+                                                        <label class="btn btn-outline-secondary" for="flupld"><i
+                                                                class="ti ti-upload me-2"></i> Click to Upload</label>
+                                                        <input type="file" id="flupld" onchange="loadFile(event)"
+                                                            accept="*" class="d-none">
+                                                        <img id="showThumbnail" style="margin-top:15px;max-height:100px;">
+                                                    </div>
+                                                    <div class="text-end btn-page mb-0 mt-4">
+                                                        <button class="btn btn-outline-secondary">Cancel</button>
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="save()">Add
+                                                            new
+                                                            Carousel</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,90 +137,80 @@
                         </div>
                     </div>
                 </div>
-                <!-- [ sample-page ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
     </div>
     <!-- [ Main Content ] end -->
 @endsection
 <script>
-    // var route_prefix = "/filemanager";
-    // $('#flupld').filemanager('image', {
-    //     prefix: route_prefix
-    // });
+    {
+        var loadFile = function(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('showThumbnail');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        };
 
-    function chooseLanguage(language) {
-        if (language === 'kh') {
-            $('.language_en').hide();
-            $('.language_kh').show();
-        } else {
-            $('.language_en').show();
-            $('.language_kh').hide();
-        }
-    }
+        function valueFill(action = null) {
 
-    function valueFill(val = null) {
-        let title_en;
-        let title_kh;
-        let description_en;
-        let description_kh;
-        let type;
-        let status;
-        let thumbnailimgBack;
+            if (action === 'clear') {
+                $('#title_en, #title_kh').val('');
+                $('#description_en, #description_kh').val('');
+                $('#type').val('');
+                $('#status').prop('checked', false);
+                $('#flupld').val('');
+                $('#showThumbnail').attr('src', '').hide();
+                return;
+            }
 
-        if (val === null) {
-            title_en = $('#title_en').val();
-            title_kh = $('#title_kh').val();
-            description_en = $('#description_en').val();
-            description_kh = $('#description_kh').val();
-            type = $('#type').val();
-            status = $('#status').val();
-            thumbnailimgBack = $('#thumbnailimgBack').val();
-        }
-
-        if (val === 'clear') {
-            $('#title_en').val('');
-            $('#title_kh').val('');
-            $('#description_en').val('');
-            $('#description_kh').val('');
-            $('#type').val('');
-            $('#status').val('');
-            $('#thumbnailimgBack').val('');
+            return {
+                title_en: $('#title_en').val(),
+                title_kh: $('#title_kh').val(),
+                description_en: $('#description_en').val(),
+                description_kh: $('#description_kh').val(),
+                type: $('#type').val(),
+                status: $('#status').is(':checked') ? 1 : 0,
+                thumbnail: $('#flupld')[0].files[0] ?? null
+            };
         }
 
-        return {
-            'title_en': title_en,
-            'title_kh': title_kh,
-            'description_en': description_en,
-            'description_kh': description_kh,
-            'type': type,
-            'status': status,
-            'thumbnailimgBack': thumbnailimgBack,
-        }
-    }
+        function save() {
+            try {
+            const data = valueFill();
+            let formData = new FormData();
 
-    function save() {
-        try {
-            $.ajax({
-                url: "{{ route('slides.add') }}",
-                type: "POST",
-                data: valueFill(),
-                success: function(response) {
-                    if (response.status == "error") {
-                        validationMgs(response);
-                        return;
+            formData.append('title_en', data.title_en);
+            formData.append('title_kh', data.title_kh);
+            formData.append('description_en', data.description_en);
+            formData.append('description_kh', data.description_kh);
+            formData.append('type', data.type);
+            formData.append('status', data.status);
+            formData.append('image', data.thumbnail);
+
+                $.ajax({
+                    url: "{{ route('slides.add') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.status == "error") {
+                            validationMgs(response);
+                            return;
+                        }
+                        unblockagePage();
+                        window.location.replace("{{ route('admin.slides') }}");
+                    },
+                    error: function(e) {
+                        Msg(e, 'error');
+                        unblockagePage();
                     }
-                    unblockagePage();
-                    window.location.replace("{{ route('admin.slides') }}");
-                },
-                error: function(e) {
-                    Msg(e, 'error');
-                    unblockagePage();
-                }
-            })
-        } catch (err) {
-            console.error(err);
+                })
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 </script>
