@@ -17,7 +17,10 @@
                         </div>
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h2 class="mb-0">Add New Carousel</h2>
+                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">Add New Carousel
+                                </h2>
+                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">Update Carousel
+                                </h2>
                             </div>
                         </div>
                     </div>
@@ -53,11 +56,12 @@
                                                         <label class="form-label">Title-en <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control" id="title_en"
+                                                            value="{{ old('title_en', $data['title_en'] ?? '') }}"
                                                             name="title_en" placeholder="Enter Title-en" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="form-label" for="descriptionEn">Description-en</label>
-                                                        <textarea id="description_en" name="description_en" class="summernote"></textarea>
+                                                        <textarea id="description_en" name="description_en" class="summernote">{{ old('description_en', $data['description_en'] ?? '') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -72,11 +76,12 @@
                                                         <label class="form-label">Title-kh <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control" id="title_kh"
+                                                            value="{{ old('title_kh', $data['title_kh'] ?? '') }}"
                                                             name="title_kh" placeholder="Enter Title-kh" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="form-label" for="descriptionEn">Description-kh</label>
-                                                        <textarea id="description_kh" name="description_kh" class="summernote"></textarea>
+                                                        <textarea id="description_kh" name="description_kh" class="summernote">{{ old('description_kh', $data['description_kh'] ?? '') }}</textarea>
                                                     </div>
                                                 </div>
 
@@ -90,23 +95,29 @@
                                                     <div class="form-group">
                                                         <label class="form-label">Type</label>
                                                         <select class="form-select" id="type" name="type">
-                                                            <option value="carousel">Carousel</option>
-                                                            <option value="advertisement">Advertisement</option>
+                                                            <option value="carousel"
+                                                                {{ old('type', $data['type'] ?? '') == 'carousel' ? 'selected' : '' }}>
+                                                                Carousel</option>
+                                                            <option value="advertisement"
+                                                                {{ old('type', $data['type'] ?? '') == 'advertisement' ? 'selected' : '' }}>
+                                                                Advertisement</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="form-label">Url</label>
                                                         <input type="text" class="form-control" id="url"
-                                                            name="url" placeholder="Enter url">
+                                                            value="{{ old('url', $data['url'] ?? '') }}" name="url"
+                                                            placeholder="Enter url">
                                                     </div>
                                                     <div class="form-check form-switch d-flex align-items-center p-0">
                                                         <label class="form-check-label h5 pe-3 mb-0"
-                                                            for="active">Active</label>
+                                                            for="status">Active</label>
                                                         <input
                                                             class="form-check-input h4 m-0 position-relative flex-shrink-0"
-                                                            type="checkbox" id="status" name="status"
-                                                            checked="">
+                                                            type="checkbox" id="status" name="status" value="1"
+                                                            {{ old('status', $data['status'] ?? 0) ? 'checked' : '' }}>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -115,22 +126,36 @@
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <p><span class="text-danger">*</span> Carousel Picture</p>
-                                                        <label class="btn btn-outline-secondary" for="flupld"><i
-                                                                class="ti ti-upload me-2"></i> Click to Upload</label>
-                                                        <input type="file" id="flupld" onchange="loadFile(event)"
-                                                            accept="*" class="d-none">
-                                                        <img id="showThumbnail" style="margin-top:15px;max-height:100px;">
-                                                    </div>
-                                                    <div class="text-end btn-page mb-0 mt-4">
-                                                        <button class="btn btn-outline-secondary">Cancel</button>
-                                                        <button type="button" class="btn btn-primary"
-                                                            onclick="save()">Add
-                                                            new
-                                                            Carousel</button>
+
+                                                        <!-- Custom upload button -->
+                                                        <label class="btn btn-outline-secondary" for="flupld">
+                                                            <i class="ti ti-upload me-2"></i> Click to Upload
+                                                        </label>
+
+                                                        <!-- Hidden file input -->
+                                                        <input type="file" id="flupld" name="image"
+                                                            accept="image/*" class="d-none" onchange="loadFile(event)">
+
+                                                        <!-- Preview image -->
+                                                        <img id="showThumbnail" style="margin-top:15px;max-height:100px;"
+                                                            src="{{ old('image', isset($data['image']) ? asset('storage/' . $data['image']) : '') }}">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- Card Footer with buttons -->
+                                    <div class="text-end">
+                                        <a href="{{ route('admin.slides') }}"
+                                            class="btn btn-outline-secondary">Cancel</a>
+                                        <button id="btnSave" type="submit" onclick="save()"
+                                            class="btn btn-primary {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">
+                                            Save
+                                        </button>
+                                        <button id="btnUpdate" type="submit" onclick="update({{ $data['id'] }})"
+                                            class="btn btn-primary {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">
+                                            Update
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -178,16 +203,16 @@
 
         function save() {
             try {
-            const data = valueFill();
-            let formData = new FormData();
+                const data = valueFill();
+                let formData = new FormData();
 
-            formData.append('title_en', data.title_en);
-            formData.append('title_kh', data.title_kh);
-            formData.append('description_en', data.description_en);
-            formData.append('description_kh', data.description_kh);
-            formData.append('type', data.type);
-            formData.append('status', data.status);
-            formData.append('image', data.thumbnail);
+                formData.append('title_en', data.title_en);
+                formData.append('title_kh', data.title_kh);
+                formData.append('description_en', data.description_en);
+                formData.append('description_kh', data.description_kh);
+                formData.append('type', data.type);
+                formData.append('status', data.status);
+                formData.append('image', data.thumbnail);
 
                 $.ajax({
                     url: "{{ route('slides.add') }}",
@@ -211,6 +236,40 @@
             } catch (err) {
                 console.error(err);
             }
+        }
+
+        function update(id) {
+            const data = valueFill();
+                let formData = new FormData();
+
+                formData.append('title_en', data.title_en);
+                formData.append('title_kh', data.title_kh);
+                formData.append('description_en', data.description_en);
+                formData.append('description_kh', data.description_kh);
+                formData.append('type', data.type);
+                formData.append('status', data.status);
+                formData.append('image', data.thumbnail);
+
+                formData.append('_method', 'PUT');
+            $.ajax({
+                    url: "{{ url('/api/slides') }}/" + id,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.status == "error") {
+                            validationMgs(response);
+                            return;
+                        }
+                        unblockagePage();
+                        window.location.replace("{{ route('admin.slides') }}");
+                    },
+                    error: function(e) {
+                        Msg(e, 'error');
+                        unblockagePage();
+                    }
+                })
         }
     }
 </script>

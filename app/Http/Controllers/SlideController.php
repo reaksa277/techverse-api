@@ -92,7 +92,18 @@ class SlideController extends Controller
      */
     public function create()
     {
-        return view('Admin.AdminMenu.Slides.form');
+        $data = [
+            'id' => null,
+            'title_en' => "",
+            'title_kh' => "",
+            'description_en' => "",
+            'description_kh' => "",
+            'type' => "",
+            'image' => "",
+            'status' => "",
+            'url' => "",
+        ];
+        return view('Admin.AdminMenu.Slides.form', compact('data'));
     }
 
     /**
@@ -175,7 +186,19 @@ class SlideController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $slide = Slide::findOrFail($id);
+        $slide = [
+            'id' => $slide->id ?? null,
+            'title_en' => $slide->title_en ?? "",
+            'title_kh' => $slide->title_kh ?? "",
+            'description_en' => $slide->description_en ?? "",
+            'description_kh' => $slide->description_kh ?? "",
+            'type' => $slide->type ?? "",
+            'image' => $slide->image ?? "",
+            'status' => $slide->status ?? "",
+            'url' => $slide->url ?? "",
+        ];
+        return view('Admin.AdminMenu.Slides.form', ['data' => $slide]);
     }
 
     /**
@@ -190,6 +213,7 @@ class SlideController extends Controller
                 'title_en' => 'required|string|max:500',
                 'tilte_kh' => 'required|string|max:500',
                 'url' => 'required|string|max:255',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
             if ($validation->failed()) {

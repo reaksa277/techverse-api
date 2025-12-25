@@ -149,17 +149,21 @@
                         "class": "dt-center",
                         render: function(data, type, row, meta) {
 
-                            var str =
-                                '<div class="dropdown">' +
-                                '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fal fa-cog" aria-hidden="true"></i></button>' +
-                                '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-                                '<a class="dropdown-item" href="javascript:void(0);" onclick="edit(' + row.id +
-                                ')"> <i class="fal fa-pencil" aria-hidden="true"></i> Edit</a>' +
-                                '<a class="dropdown-item" href="javascript:void(0);" onclick="destroy(' + row
-                                .id +
-                                ')"> <i class="fal fa-trash" aria-hidden="true"></i> Remove</a>' +
-                                '</div>' +
-                                '</div>';
+                            var str = `
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ti ti-menu-2"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="/api/admin/slides/edit/${row.id}">
+                                                <i class="ti ti-edit"></i> Edit
+                                            </a>
+                                            <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="destroy(${row.id})">
+                                                <i class="ti ti-trash"></i> Remove
+                                            </a>
+                                        </div>
+                                    </div>
+                                    `;
                             return str;
 
                         }
