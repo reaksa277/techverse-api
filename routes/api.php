@@ -39,7 +39,7 @@ Route::delete('/categoryarticles/{id}', [CategoryArticleController::class, 'dest
 Route::get('/admin/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
 
 // Article route
-Route::post('/articles', [ArticleController::class, 'store'])->name('article.add');
+Route::post('/articles/add', [ArticleController::class, 'store'])->name('article.add');
 Route::get('/articles', [ArticleController::class, 'index'])->name('article.get-data');
 Route::get('/articles/{id}', [ArticleController::class, 'show']);
 Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('slide.update');

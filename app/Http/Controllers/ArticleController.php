@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Articles;
+use App\Models\CategoryArticle;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
 {
@@ -96,14 +99,21 @@ class ArticleController extends Controller
             'id' => null,
             'title_en' => "",
             'title_kh' => "",
+            'info_en' => "",
+            'info_kh' => "",
             'description_en' => "",
             'description_kh' => "",
-            'type' => "",
+            'status' => 1,
+            'category_id' => null,
+            'category_name' => "",
+            'slug_en' => "",
+            'slug_kh' => "",
             'image' => "",
-            'status' => "",
             'url' => "",
+            'tag' => "",
         ];
-        return view('Admin.AdminMenu.Articles.form', compact('data'));
+        $categories = CategoryArticle::select('id', 'title_en')->get();
+        return view('Admin.AdminMenu.Articles.form', compact('data', 'categories'));
     }
 
     /**
@@ -112,32 +122,38 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         try {
-            $validation = Validator($request->all(), [
+            // Log::debug("article info: ", ["article"=>$request]);
+            $validator = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
-                'tilte_kh' => 'required|string|max:500',
+                'title_kh' => 'required|string|max:500',
+                'description_en'  => 'required|string',
+                'description_kh'  => 'required|string',
+                'category_id'     => 'required|exists:category_articles,id',
                 'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
-            if ($validation->failed()) {
+            if ($validator->fails()) {
                 return response()->json(
                     [
                         'status' => 'error',
                         'icon' => 'error',
-                        'result' => $validation->getMessageBag(),
+                        'result' => $validator->getMessageBag(),
                     ],
                     422
                 );
             }
 
-            $data = $request->all();
+            $data = $validator->validated();
 
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images', 'public');
+                $imagePath = $request->file('image')->store('images/articles', 'public');
                 $data['image'] = $imagePath;
             }
-            $slide = Slide::create($data);
+            $artilce = Articles::create($data);
+            Log::debug("article info: ", ["article" => $artilce]);
+            dd($artilce);
 
-            $slide->image = $slide->image ? asset('storage/' . $slide->image) : null;
+            $artilce->image = $artilce->image ? asset('storage/' . $artilce->image) : null;
 
             return response()->json([
                 'status' => 'success',

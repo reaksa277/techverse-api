@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('info_en', 500)->nullable();
             $table->string('info_kh', 500)->nullable();
             $table->string('image', 1000)->nullable();
-            $table->string('status', 255)->default('active');
+            $table->string('status', 255)->default('1');
             $table->foreignId('category_id')->constrained('category_articles')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

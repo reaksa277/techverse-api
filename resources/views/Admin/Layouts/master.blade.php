@@ -90,7 +90,8 @@
 
     <!-- Page-specific scripts -->
 
-
+    @yield('script')
+    
     <script>
         $(document).ready(function() {
             $('.summernote').summernote();
@@ -115,7 +116,7 @@
             timerProgressBar: true
         });
     </script>
-    @yield('script')
+
 </body>
 
 </html>
