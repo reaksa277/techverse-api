@@ -22,6 +22,9 @@ Route::get('/slides', [SlideController::class, 'index'])->name('slides.get-data'
 Route::get('/slides/{id}', [SlideController::class, 'show']);
 Route::put('/slides/{id}', [SlideController::class, 'update'])->name('slide.update');
 Route::delete('/slides/{id}', [SlideController::class, 'destroy']);
+Route::get('/admin/slides', [SlideController::class, 'view'])->name('admin.slides');
+Route::get('/admin/slides/create', [SlideController::class, 'create'])->name('slides.create');
+Route::get('/admin/slides/edit/{id}', [SlideController::class, 'edit'])->name('slide.edit');
 
 // CategoryArticle route
 Route::post('/categoryarticles', [CategoryArticleController::class, 'store']);
@@ -30,15 +33,17 @@ Route::get('/categoryarticles/{id}', [CategoryArticleController::class, 'show'])
 Route::put('/categoryarticles/{id}', [CategoryArticleController::class, 'update']);
 Route::delete('/categoryarticles/{id}', [CategoryArticleController::class, 'destroy']);
 
-// Article route
-Route::post('/articles', [ArticleController::class, 'store']);
-Route::get('/articles', [ArticleController::class, 'index']);
-Route::get('/articles/{id}', [ArticleController::class, 'show']);
-Route::put('/articles/{id}', [ArticleController::class, 'update']);
-Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+
 
 # DashboardBackend
 Route::get('/admin/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
-Route::get('/admin/slides', [SlideController::class, 'view'])->name('admin.slides');
-Route::get('/admin/slides/create', [SlideController::class, 'create'])->name('slides.create');
-Route::get('/admin/slides/edit/{id}', [SlideController::class, 'edit'])->name('slide.edit');
+
+// Article route
+Route::post('/articles', [ArticleController::class, 'store'])->name('article.add');
+Route::get('/articles', [ArticleController::class, 'index'])->name('article.get-data');
+Route::get('/articles/{id}', [ArticleController::class, 'show']);
+Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('slide.update');
+Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+Route::get('/admin/articles', [ArticleController::class, 'view'])->name('admin.article');
+Route::get('/admin/articles/create', [ArticleController::class, 'create'])->name('article.create');
+Route::get('/admin/articles/edit/{id}', [ArticleController::class, 'edit'])->name('article.edit');
