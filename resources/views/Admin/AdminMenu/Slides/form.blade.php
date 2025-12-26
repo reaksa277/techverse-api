@@ -240,36 +240,36 @@
 
         function update(id) {
             const data = valueFill();
-                let formData = new FormData();
+            let formData = new FormData();
 
-                formData.append('title_en', data.title_en);
-                formData.append('title_kh', data.title_kh);
-                formData.append('description_en', data.description_en);
-                formData.append('description_kh', data.description_kh);
-                formData.append('type', data.type);
-                formData.append('status', data.status);
-                formData.append('image', data.thumbnail);
+            formData.append('title_en', data.title_en);
+            formData.append('title_kh', data.title_kh);
+            formData.append('description_en', data.description_en);
+            formData.append('description_kh', data.description_kh);
+            formData.append('type', data.type);
+            formData.append('status', data.status);
+            formData.append('image', data.thumbnail);
 
-                formData.append('_method', 'PUT');
+            formData.append('_method', 'PUT');
             $.ajax({
-                    url: "{{ url('/api/slides') }}/" + id,
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == "error") {
-                            validationMgs(response);
-                            return;
-                        }
-                        unblockagePage();
-                        window.location.replace("{{ route('admin.slides') }}");
-                    },
-                    error: function(e) {
-                        Msg(e, 'error');
-                        unblockagePage();
+                url: "{{ url('/api/slides') }}/" + id,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == "error") {
+                        validationMgs(response);
+                        return;
                     }
-                })
+                    unblockagePage();
+                    window.location.replace("{{ route('admin.slides') }}");
+                },
+                error: function(e) {
+                    Msg(e, 'error');
+                    unblockagePage();
+                }
+            })
         }
     }
 </script>

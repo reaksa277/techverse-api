@@ -233,7 +233,18 @@ class SlideController extends Controller
                 ], 404);
             }
 
-            $slide->update($request->all());
+            $slide->title_en = $request->title_en;
+            $slide->title_kh = $request->title_kh;
+            $slide->url = $request->url;
+            $slide->type = $request->type ?? $slide->type;
+            $slide->status = $request->status ?? 0;
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $slide['image'] = $imagePath;
+            }
+
+            $slide->save();
 
             return response()->json([
                 'status' => true,
@@ -257,8 +268,6 @@ class SlideController extends Controller
 
             $slide = Slide::find($id);
 
-            Log::debug("slide info: ", ["slide" => $slide]);
-
             if (!$slide) {
                 return response()->json([
                     'status' => false,
@@ -266,11 +275,13 @@ class SlideController extends Controller
                 ], 404);
             }
 
-            $slide->delete();
+            $slide['status'] = 0;
+
+            $slide->update();
 
             return response()->json([
                 'status' => true,
-                'message' => 'successfully deleted slide'
+                'message' => 'Slide deleted successfully'
             ], 204);
         } catch (\Exception $e) {
             return response()->json([

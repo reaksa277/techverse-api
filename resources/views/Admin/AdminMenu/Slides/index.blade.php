@@ -65,6 +65,33 @@
                 dataList();
             });
 
+            function destroy(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to Deleted now!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: "{{ url('/api/slides') }}/" + id,
+                            type: "DELETE",
+                            success: function(response) {
+                                unblockagePage();
+                                window.location.reload();
+                            },
+                            error: function(e) {
+                                Msg('Error Saving User', 'error');
+                                unblockagePage();
+                            }
+                        });
+                    }
+                });
+            }
+
             // datatable data
             function dataList() {
                 var cols = [{

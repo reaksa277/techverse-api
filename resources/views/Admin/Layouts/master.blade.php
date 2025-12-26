@@ -34,7 +34,8 @@
 
     <!-- Summernote (Bootstrap 4 compatible – WORKS with BS5) -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
-
+    <!-- Sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body data-pc-preset="preset-1" data-pc-theme="light">
@@ -84,9 +85,6 @@
     <!-- DataTables -->
     <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
 
-    <!-- Sweet alert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- Summernote JS -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 
@@ -106,6 +104,16 @@
         function unblockagePage() {
             $(document).ajaxStop($.unblockUI);
         }
+    </script>
+    <!-- Toast definition -->
+    <script>
+        window.Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
     </script>
     @yield('script')
 </body>
