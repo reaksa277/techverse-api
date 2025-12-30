@@ -28,7 +28,7 @@
                     <div class="card table-card">
                         <div class="card-body">
                             <div class="text-end p-4 pb-0">
-                                <a class="btn btn-primary" href="{{ route('article.create') }}">
+                                <a class="btn btn-primary" href="{{ route('categoryarticles.create') }}">
                                     <i class="ti ti-plus f-18"></i> Add Category
                                 </a>
                             </div>
@@ -172,7 +172,7 @@
                                             <i class="ti ti-menu-2"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/api/admin/articles/edit/${row.id}">
+                                            <a class="dropdown-item" href="/api/admin/categoryarticles/edit/${row.id}">
                                                 <i class="ti ti-edit"></i> Edit
                                             </a>
                                             <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="destroy(${row.id})">

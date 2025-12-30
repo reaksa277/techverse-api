@@ -11,15 +11,15 @@
                         <div class="col-md-12">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{{ route('admin.article') }}">Aritcle</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Add New Aritcle</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.categoryarticles') }}">Category</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Add New Category</li>
                             </ul>
                         </div>
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">Add New Aritcle
+                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">Add New Category
                                 </h2>
-                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">Update Aritcle
+                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">Update Category
                                 </h2>
                             </div>
                         </div>
@@ -62,12 +62,6 @@
                                                                     name="title_en" placeholder="Enter Title-en" required>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="form-label">Info-en</label>
-                                                                <input type="text" class="form-control" id="info_en"
-                                                                    value="{{ old('info_en', $data['info_en'] ?? '') }}"
-                                                                    name="info_en" placeholder="Enter Info-en">
-                                                            </div>
-                                                            <div class="form-group">
                                                                 <label class="form-label"
                                                                     for="descriptionEn">Description-en</label>
                                                                 <textarea id="description_en" name="description_en" class="summernote">{{ old('description_en', $data['description_en'] ?? '') }}</textarea>
@@ -89,12 +83,6 @@
                                                                     name="title_kh" placeholder="Enter Title-kh" required>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="form-label">Info-kh</label>
-                                                                <input type="text" class="form-control" id="info_kh"
-                                                                    value="{{ old('info_kh', $data['info_kh'] ?? '') }}"
-                                                                    name="info_kh" placeholder="Enter Info-kh">
-                                                            </div>
-                                                            <div class="form-group">
                                                                 <label class="form-label"
                                                                     for="descriptionEn">Description-kh</label>
                                                                 <textarea id="description_kh" name="description_kh" class="summernote">{{ old('description_kh', $data['description_kh'] ?? '') }}</textarea>
@@ -110,22 +98,20 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label class="form-label">Category</label>
-                                                    <select name="category_id" id="category_id" class="form-control">
-                                                        <option value="">-- Select Category --</option>
-                                                        @foreach ($categories as $category)
-                                                            <option value="{{ $category->id }}"
-                                                                {{ $data['category_id'] == $category->id ? 'selected' : '' }}>
-                                                                {{ $category->title_en }}
-                                                            </option>
-                                                        @endforeach
+                                                    <label class="form-label">Type</label>
+                                                    <select class="form-select" id="type" name="type">
+                                                        <option value="case study"
+                                                            {{ old('type', $data['type'] ?? '') == 'case_study' ? 'selected' : '' }}>
+                                                            Case Study</option>
+                                                        <option value="service"
+                                                            {{ old('type', $data['type'] ?? '') == 'service' ? 'selected' : '' }}>
+                                                            Service</option>
+                                                        <option value="blog"
+                                                            {{ old('type', $data['type'] ?? '') == 'blog' ? 'selected' : '' }}>
+                                                            <i class="fas fa-bowling-pins"></i>
+                                                            Blog
+                                                        </option>
                                                     </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">Tag</label>
-                                                    <input type="text" class="form-control" id="tag"
-                                                        value="{{ old('tag', $data['tag'] ?? '') }}" name="tag"
-                                                        placeholder="Enter tag">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-label">Url</label>
@@ -161,15 +147,15 @@
                                     </div>
                                     <!-- Card Footer with buttons -->
                                     <div class="text-end">
-                                        <a href="{{ route('admin.article') }}"
+                                        <a href="{{ route('admin.categoryarticles') }}"
                                             class="btn btn-outline-secondary">Cancel</a>
                                         <button id="btnSave" type="button" onclick="save()"
                                             class="btn btn-primary {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">
-                                            Save Article
+                                            Save Category
                                         </button>
                                         <button id="btnUpdate" type="button" onclick="update({{ $data['id'] }})"
                                             class="btn btn-primary {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">
-                                            Update Article
+                                            Update Category
                                         </button>
                                     </div>
                                 </div>
@@ -197,12 +183,9 @@
 
             if (action === 'clear') {
                 $('#title_en, #title_kh').val('');
-                $('#info_en, #info_kh').val('');
                 $('#description_en, #description_kh').val('');
-                $('#category_id').val('');
+                $('#type').val('');
                 $('#status').prop('checked', false);
-                $('#tag').val('');
-                $('#url').val('');
                 $('#flupld').val('');
                 $('#showThumbnail').attr('src', '').hide();
                 return;
@@ -211,13 +194,9 @@
             const data = {
                 title_en: $('#title_en').val(),
                 title_kh: $('#title_kh').val(),
-                info_en: $('#info_en').val(),
-                info_kh: $('#info_kh').val(),
                 description_en: $('#description_en').val(),
                 description_kh: $('#description_kh').val(),
-                categoryId: $('#category_id').val(),
-                tag: $('#tag').val(),
-                url: $('#url').val(),
+                type: $('#type').val(),
                 status: $('#status').is(':checked') ? 1 : 0,
                 thumbnail: $('#flupld')[0].files[0] ?? null
             };
@@ -232,18 +211,13 @@
 
                 formData.append('title_en', data.title_en);
                 formData.append('title_kh', data.title_kh);
-                formData.append('info_en', data.info_en || null);
-                formData.append('info_kh', data.info_kh || null);
                 formData.append('description_en', data.description_en);
                 formData.append('description_kh', data.description_kh);
-                formData.append('category_id', data.categoryId);
-                formData.append('tag', data.tag);
-                formData.append('url', data.url);
+                formData.append('type', data.type);
                 formData.append('status', data.status);
                 formData.append('image', data.thumbnail);
-
                 $.ajax({
-                    url: "{{ route('article.add') }}",
+                    url: "{{ route('categoryarticles.add') }}",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -254,7 +228,7 @@
                             return;
                         }
                         unblockagePage();
-                        window.location.replace("{{ route('admin.article') }}");
+                        window.location.replace("{{ route('admin.categoryarticles') }}");
                     },
                     error: function(e) {
                         Msg(e, 'error');
@@ -272,18 +246,15 @@
 
             formData.append('title_en', data.title_en);
             formData.append('title_kh', data.title_kh);
-            formData.append('info_en', data.info_en);
-            formData.append('info_kh', data.info_kh);
             formData.append('description_en', data.description_en);
             formData.append('description_kh', data.description_kh);
-            formData.append('category_id', data.categoryId);
+            formData.append('type', data.type);
             formData.append('status', data.status);
-            formData.append('tag', data.tag);
             formData.append('image', data.thumbnail);
 
             formData.append('_method', 'PUT');
             $.ajax({
-                url: "{{ url('/api/articles') }}/" + id,
+                url: "{{ url('/api/categoryarticles') }}/" + id,
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -294,7 +265,7 @@
                         return;
                     }
                     unblockagePage();
-                    window.location.replace("{{ route('admin.article') }}");
+                    window.location.replace("{{ route('admin.categoryarticles') }}");
                 },
                 error: function(e) {
                     Msg(e, 'error');

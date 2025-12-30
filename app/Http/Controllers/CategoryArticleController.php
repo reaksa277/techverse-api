@@ -132,9 +132,9 @@ class CategoryArticleController extends Controller
                 $imagePath = $request->file('image')->store('images', 'public');
                 $data['image'] = $imagePath;
             }
-            $slide = Slide::create($data);
+            $category_article = CategoryArticle::create($data);
 
-            $slide->image = $slide->image ? asset('storage/' . $slide->image) : null;
+            $category_article->image = $category_article->image ? asset('storage/' . $category_article->image) : null;
 
             return response()->json([
                 'status' => 'success',
@@ -156,9 +156,9 @@ class CategoryArticleController extends Controller
     public function show(string $id)
     {
         try {
-            $slide = Slide::find($id);
+            $category_article = CategoryArticle::find($id);
 
-            if (!$slide) {
+            if (!$category_article) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Slide not found with id : ' . $id,
@@ -167,8 +167,8 @@ class CategoryArticleController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Successfully get slide with id : ' . $id,
-                'data' => $slide
+                'message' => 'Successfully get Category Article with id : ' . $id,
+                'data' => $category_article
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -183,19 +183,19 @@ class CategoryArticleController extends Controller
      */
     public function edit(string $id)
     {
-        $slide = Slide::findOrFail($id);
-        $slide = [
-            'id' => $slide->id ?? null,
-            'title_en' => $slide->title_en ?? "",
-            'title_kh' => $slide->title_kh ?? "",
-            'description_en' => $slide->description_en ?? "",
-            'description_kh' => $slide->description_kh ?? "",
-            'type' => $slide->type ?? "",
-            'image' => $slide->image ?? "",
-            'status' => $slide->status ?? "",
-            'url' => $slide->url ?? "",
+        $category_article = CategoryArticle::findOrFail($id);
+        $category_article = [
+            'id' => $category_article->id ?? null,
+            'title_en' => $category_article->title_en ?? "",
+            'title_kh' => $category_article->title_kh ?? "",
+            'description_en' => $category_article->description_en ?? "",
+            'description_kh' => $category_article->description_kh ?? "",
+            'type' => $category_article->type ?? "",
+            'image' => $category_article->image ?? "",
+            'status' => $category_article->status ?? "",
+            'url' => $category_article->url ?? "",
         ];
-        return view('Admin.AdminMenu.CategoryArticles.form', );
+        return view('Admin.AdminMenu.CategoryArticles.form', ['data' => $category_article]);
     }
 
     /**
@@ -209,7 +209,6 @@ class CategoryArticleController extends Controller
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
                 'tilte_kh' => 'required|string|max:500',
-                'url' => 'required|string|max:255',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
@@ -221,32 +220,33 @@ class CategoryArticleController extends Controller
                 ], 422);
             }
 
-            $slide = Slide::find($id);
+            $category_article = CategoryArticle::find($id);
 
-            if (!$slide) {
+            if (!$category_article) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : ' . $id,
+                    'message' => 'category_article not found with id : ' . $id,
                 ], 404);
             }
 
-            $slide->title_en = $request->title_en;
-            $slide->title_kh = $request->title_kh;
-            $slide->url = $request->url;
-            $slide->type = $request->type ?? $slide->type;
-            $slide->status = $request->status ?? 0;
+            $category_article->title_en = $request->title_en;
+            $category_article->title_kh = $request->title_kh;
+            $category_article->description_en = $request->description_en;
+            $category_article->description_kh = $request->description_kh;
+            $category_article->type = $request->type ?? $category_article->type;
+            $category_article->status = $request->status ?? 0;
 
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('images', 'public');
-                $slide['image'] = $imagePath;
+                $category_article['image'] = $imagePath;
             }
 
-            $slide->save();
+            $category_article->save();
 
             return response()->json([
                 'status' => true,
-                'message' => 'successfully updated slide with id : ' . $id,
-                'data' => $slide
+                'message' => 'successfully updated category_article with id : ' . $id,
+                'data' => $category_article
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -263,18 +263,19 @@ class CategoryArticleController extends Controller
     {
         try {
 
-            $slide = Slide::find($id);
+            $category_article = CategoryArticle::find($id);
 
-            if (!$slide) {
+            if (!$category_article) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : ' . $id,
+                    'message' => 'category_article not found with id : ' . $id,
                 ], 404);
             }
 
-            $slide['status'] = 0;
+            $category_article['status'] = 0;
 
-            $slide->update();
+            $category_article->update();
+            $category_article->delete();
 
             return response()->json([
                 'status' => true,
