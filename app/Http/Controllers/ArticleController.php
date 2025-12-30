@@ -15,6 +15,7 @@ class ArticleController extends Controller
         try {
             $baseQuery = DB::table('articles as a')
                 ->join('category_articles as ca', 'a.category_id', '=', 'ca.id')
+                ->where('a.status', 1)
                 ->whereNull('a.deleted_at')
                 ->whereNull('ca.deleted_at')
                 ->select('a.*', 'ca.title_en as category_name');
@@ -293,22 +294,22 @@ class ArticleController extends Controller
     {
         try {
 
-            $slide = Articles::find($id);
+            $article = Articles::find($id);
 
-            if (!$slide) {
+            if (!$article) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : ' . $id,
+                    'message' => 'Article not found with id : ' . $id,
                 ], 404);
             }
 
-            $slide['status'] = 0;
+            $article['status'] = 0;
 
-            $slide->update();
+            $article->update();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Slide deleted successfully'
+                'message' => 'Article deleted successfully'
             ], 204);
         } catch (\Exception $e) {
             return response()->json([
