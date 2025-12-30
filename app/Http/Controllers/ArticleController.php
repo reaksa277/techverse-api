@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Articles;
 use App\Models\CategoryArticle;
-use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
