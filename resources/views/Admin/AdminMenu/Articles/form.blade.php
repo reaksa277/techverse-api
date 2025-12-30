@@ -111,11 +111,11 @@
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label class="form-label">Category</label>
-                                                    <select name="category_id" id="category_id" class="form-select">
+                                                    <select name="category_id" id="category_id" class="form-control">
                                                         <option value="">-- Select Category --</option>
                                                         @foreach ($categories as $category)
                                                             <option value="{{ $category->id }}"
-                                                                @selected(old('category_id', $data->category_id ?? '') == $category->id)>
+                                                                {{ $data['category_id'] == $category->id ? 'selected' : '' }}>
                                                                 {{ $category->title_en }}
                                                             </option>
                                                         @endforeach
@@ -253,10 +253,6 @@
                             validationMgs(response);
                             return;
                         }
-
-                        console.log("data: ", response);
-
-
                         unblockagePage();
                         window.location.replace("{{ route('admin.article') }}");
                     },
@@ -276,15 +272,18 @@
 
             formData.append('title_en', data.title_en);
             formData.append('title_kh', data.title_kh);
+            formData.append('info_en', data.info_en);
+            formData.append('info_kh', data.info_kh);
             formData.append('description_en', data.description_en);
             formData.append('description_kh', data.description_kh);
-            formData.append('type', data.type);
+            formData.append('category_id', data.categoryId);
             formData.append('status', data.status);
+            formData.append('tag', data.tag);
             formData.append('image', data.thumbnail);
 
             formData.append('_method', 'PUT');
             $.ajax({
-                url: "{{ url('/api/slides') }}/" + id,
+                url: "{{ url('/api/articles') }}/" + id,
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -295,7 +294,7 @@
                         return;
                     }
                     unblockagePage();
-                    window.location.replace("{{ route('admin.slides') }}");
+                    window.location.replace("{{ route('admin.article') }}");
                 },
                 error: function(e) {
                     Msg(e, 'error');

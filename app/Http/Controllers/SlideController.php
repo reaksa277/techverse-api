@@ -198,7 +198,7 @@ class SlideController extends Controller
             'status' => $slide->status ?? "",
             'url' => $slide->url ?? "",
         ];
-        return view('Admin.AdminMenu.Slides.form', ['data' => $slide]);
+        return view('Admin.AdminMenu.Slides.form', );
     }
 
     /**
