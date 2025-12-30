@@ -33,9 +33,9 @@
                     <div class="card">
                         <div class="card-body">
                             <form id="slideForm" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-8">
-                                        @csrf
                                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                             <li class="nav-item" role="presentation">
                                                 <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
@@ -62,11 +62,10 @@
                                                                     name="title_en" placeholder="Enter Title-en" required>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="form-label">Info-en <span
-                                                                        class="text-danger">*</span></label>
+                                                                <label class="form-label">Info-en</label>
                                                                 <input type="text" class="form-control" id="info_en"
                                                                     value="{{ old('info_en', $data['info_en'] ?? '') }}"
-                                                                    name="info_en" placeholder="Enter Info-en" required>
+                                                                    name="info_en" placeholder="Enter Info-en">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="form-label"
@@ -90,11 +89,10 @@
                                                                     name="title_kh" placeholder="Enter Title-kh" required>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="form-label">Info-kh <span
-                                                                        class="text-danger">*</span></label>
+                                                                <label class="form-label">Info-kh</label>
                                                                 <input type="text" class="form-control" id="info_kh"
                                                                     value="{{ old('info_kh', $data['info_kh'] ?? '') }}"
-                                                                    name="info_kh" placeholder="Enter Info-kh" required>
+                                                                    name="info_kh" placeholder="Enter Info-kh">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="form-label"
@@ -210,7 +208,7 @@
                 return;
             }
 
-            return {
+            const data = {
                 title_en: $('#title_en').val(),
                 title_kh: $('#title_kh').val(),
                 info_en: $('#info_en').val(),
@@ -223,6 +221,8 @@
                 status: $('#status').is(':checked') ? 1 : 0,
                 thumbnail: $('#flupld')[0].files[0] ?? null
             };
+
+            return data;
         }
 
         function save() {
@@ -232,8 +232,8 @@
 
                 formData.append('title_en', data.title_en);
                 formData.append('title_kh', data.title_kh);
-                formData.append('info_en', data.info_en);
-                formData.append('info_kh', data.info_kh);
+                formData.append('info_en', data.info_en || null);
+                formData.append('info_kh', data.info_kh || null);
                 formData.append('description_en', data.description_en);
                 formData.append('description_kh', data.description_kh);
                 formData.append('category_id', data.categoryId);
@@ -241,10 +241,6 @@
                 formData.append('url', data.url);
                 formData.append('status', data.status);
                 formData.append('image', data.thumbnail);
-
-                for (let pair of formData.entries()) {
-                    console.log(pair[0], pair[1]);
-                }
 
                 $.ajax({
                     url: "{{ route('article.add') }}",
@@ -258,8 +254,11 @@
                             return;
                         }
 
+                        console.log("data: ", response);
+
+
                         unblockagePage();
-                        // window.location.replace("{{ route('admin.article') }}");
+                        window.location.replace("{{ route('admin.article') }}");
                     },
                     error: function(e) {
                         Msg(e, 'error');

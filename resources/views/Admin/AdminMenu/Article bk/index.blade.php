@@ -10,11 +10,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Articles</h5>
+                                <h5 class="m-b-10">Aritcle</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Articles</li>
+                                <li class="breadcrumb-item" aria-current="page">Aritcle</li>
                             </ul>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
                     <div class="card table-card">
                         <div class="card-body">
                             <div class="text-end p-4 pb-0">
-                                <a class="btn btn-primary" href="{{ route('article.create') }}">
+                                <a class="btn btn-primary" href="{{ route('slides.create') }}">
                                     <i class="ti ti-plus f-18"></i> Add Article
                                 </a>
                             </div>
@@ -76,7 +76,7 @@
                 }).then((result) => {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url('/api/articles') }}/" + id,
+                            url: "{{ url('/api/slides') }}/" + id,
                             type: "DELETE",
                             success: function(response) {
                                 unblockagePage();
@@ -128,7 +128,7 @@
                     {
                         'data': 'info_en',
                         'name': 'info_en',
-                        'searchable': false,
+                        'searchable': true,
                         'orderable': true,
                         'visible': true,
                         render: function(info_en, type, row) {
@@ -136,25 +136,11 @@
                         }
                     },
                     {
-                        'data': 'category_name',
-                        'name': 'category_name',
+                        'data': 'type',
+                        'name': 'type',
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
-                        render: function(category_name, type, row) {
-                            return category_name;
-                        }
-                    },
-                    {
-                        'data': 'status',
-                        'name': 'status',
-                        'searchable': true,
-                        'orderable': true,
-                        'visible': true,
-                        className: 'text-center',
-                        render: function(status, type, row) {
-                            return status;
-                        }
                     },
                     {
                         "data": null,
@@ -171,7 +157,7 @@
                                             <i class="ti ti-menu-2"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/api/admin/articles/edit/${row.id}">
+                                            <a class="dropdown-item" href="/api/admin/slides/edit/${row.id}">
                                                 <i class="ti ti-edit"></i> Edit
                                             </a>
                                             <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="destroy(${row.id})">
@@ -197,7 +183,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('article.get-data') }}",
+                        url: "{{ route('admin.articles.list') }}",
                         type: 'GET',
                         data: function(d) {
                             d.draw = d.draw;

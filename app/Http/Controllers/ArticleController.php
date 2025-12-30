@@ -7,7 +7,6 @@ use App\Models\CategoryArticle;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
 {
@@ -106,8 +105,6 @@ class ArticleController extends Controller
             'status' => 1,
             'category_id' => null,
             'category_name' => "",
-            'slug_en' => "",
-            'slug_kh' => "",
             'image' => "",
             'url' => "",
             'tag' => "",
@@ -122,7 +119,6 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         try {
-            // Log::debug("article info: ", ["article"=>$request]);
             $validator = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
                 'title_kh' => 'required|string|max:500',
@@ -144,16 +140,19 @@ class ArticleController extends Controller
             }
 
             $data = $validator->validated();
-
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('images/articles', 'public');
                 $data['image'] = $imagePath;
             }
-            $artilce = Articles::create($data);
-            Log::debug("article info: ", ["article" => $artilce]);
-            dd($artilce);
 
-            $artilce->image = $artilce->image ? asset('storage/' . $artilce->image) : null;
+            $data['info_en'] = $request->info_en;
+            $data['info_kh'] = $request->info_kh;
+
+            $data['slug_en'] = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\ \  \|\\\]/", '-', strtolower($data['title_en']));
+            $data['slug_kh'] = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\ \  \|\\\]/", '-', strtolower($data['title_kh']));
+
+            $article = Articles::create($data);
+            $article->image = $article->image ? asset('storage/' . $article->image) : null;
 
             return response()->json([
                 'status' => 'success',
