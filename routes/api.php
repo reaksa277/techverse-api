@@ -4,6 +4,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryArticleController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,15 @@ Route::get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     require __DIR__.'/api/v1.php';
 });
-
+// User route
+Route::post('/users', [UserController::class, 'store'])->name('users.add');
+Route::get('/users', [UserController::class, 'index'])->name('users.get-data');
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::put('/users/{id}', [UserController::class, 'update'])->name('slide.update');
+Route::delete('/users/{id}', [UserController::class, 'destroy']);
+Route::get('/admin/users', [UserController::class, 'view'])->name('admin.users');
+Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');
+Route::get('/admin/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
 
 // Slide route
 Route::post('/slides', [SlideController::class, 'store'])->name('slides.add');
@@ -35,8 +44,6 @@ Route::delete('/categoryarticles/{id}', [CategoryArticleController::class, 'dest
 Route::get('/admin/categoryarticles', [CategoryArticleController::class, 'view'])->name('admin.categoryarticles');
 Route::get('/admin/categoryarticles/create', [CategoryArticleController::class, 'create'])->name('categoryarticles.create');
 Route::get('/admin/categoryarticles/edit/{id}', [CategoryArticleController::class, 'edit'])->name('categoryarticles.edit');
-
-
 
 # DashboardBackend
 Route::get('/admin/dashboard', [DashboardController::class, 'view'])->name('admin.dashboard');
