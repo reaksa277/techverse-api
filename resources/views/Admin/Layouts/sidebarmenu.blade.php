@@ -25,6 +25,12 @@
                 </a>
             </li>
             <li class="pc-item">
+                <a href="{{ route('admin.categoryarticles') }}" class="pc-link">
+                    <span class="pc-micon"><i class="ti ti-files"></i></span>
+                    <span class="pc-mtext">Category Articles</span>
+                </a>
+            </li>
+            <li class="pc-item">
                 <a href="{{ route('admin.slides') }}" class="pc-link">
                     <span class="pc-micon"><i class="ti ti-picture-in-picture"></i></span>
                     <span class="pc-mtext">Carousel</span>

@@ -2,25 +2,80 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\CategoryArticle;
+use App\Models\Slide;
 use Illuminate\Http\Request;
 
 class CategoryArticleController extends Controller
 {
+    public function getDataTable(Request $request)
+    {
+        try {
+            $baseQuery = CategoryArticle::whereNull('deleted_at')->where('status', 1);
+
+            $recordsTotal = $baseQuery->count();
+
+            $query = clone $baseQuery;
+
+            // Search
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $searchValue = $request->search['value'];
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('title_kh', 'like', "%$searchValue%")
+                        ->orWhere('title_en', 'like', "%$searchValue%")
+                        ->orWhere('type', 'like', "%$searchValue%");
+                });
+            }
+
+            $recordsFiltered = $query->count();
+
+            // Sorting
+            if ($request->has('order')) {
+                $orderColumnIndex = $request->order[0]['column'];
+                $orderDirection   = $request->order[0]['dir'];
+
+                $orderColumn = $request->columns[$orderColumnIndex]['data'];
+
+                if (!empty($orderColumn)) {
+                    $query->orderBy($orderColumn, $orderDirection);
+                }
+            }
+
+            // Pagination
+            $start = $request->input('start', 0);
+            $length = $request->input('length', 10);
+            $query->skip($start)->take($length);
+
+            $data = $query->get();
+
+            return [
+                'draw' => $request->input('draw', 1),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ];
+        } catch (\Exception $e) {
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => [],
+            ], 500);
+        }
+    }
+    public function view()
+    {
+        return view('Admin.AdminMenu.CategoryArticles.index');
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $category_articles = CategoryArticle::all();
+            $category_articles = $this->getDataTable($request);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Category Articles retrieved successfully',
-                'data' => $category_articles
-            ], 200);
+            return response()->json($category_articles);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -34,7 +89,18 @@ class CategoryArticleController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'id' => null,
+            'title_en' => "",
+            'title_kh' => "",
+            'description_en' => "",
+            'description_kh' => "",
+            'type' => "",
+            'image' => "",
+            'status' => "",
+            'url' => "",
+        ];
+        return view('Admin.AdminMenu.CategoryArticles.form', compact('data'));
     }
 
     /**
@@ -43,27 +109,38 @@ class CategoryArticleController extends Controller
     public function store(Request $request)
     {
         try {
-
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
-                'title_kh' => 'required|string|max:500',
-                'type' => 'required|string|max:255',
+                'tilte_kh' => 'required|string|max:500',
+                'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
             if ($validation->failed()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'error' => $validation->errors(),
-                ]);
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'icon' => 'error',
+                        'result' => $validation->getMessageBag(),
+                    ],
+                    422
+                );
             }
 
-            $category_articles = CategoryArticle::create($request->all());
+            $data = $request->all();
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $data['image'] = $imagePath;
+            }
+            $slide = Slide::create($data);
+
+            $slide->image = $slide->image ? asset('storage/' . $slide->image) : null;
 
             return response()->json([
-                'status' => true,
-                'message' => 'created category articles successfullly',
-                'data' => $category_articles
+                'status' => 'success',
+                'icon' => 'success',
+                'message' => 'created slide successfullly',
+                'data' => $this->getDataTable($request),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -79,20 +156,19 @@ class CategoryArticleController extends Controller
     public function show(string $id)
     {
         try {
+            $slide = Slide::find($id);
 
-            $category_articles = CategoryArticle::find($id);
-
-            if (!$category_articles) {
+            if (!$slide) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Category Article not found with id : ' . $id,
+                    'message' => 'Slide not found with id : ' . $id,
                 ], 404);
             }
 
             return response()->json([
-                'status' => false,
-                'message' => 'Successfully retrieved Category Article with id : ' . $id,
-                'data' => $category_articles
+                'status' => true,
+                'message' => 'Successfully get slide with id : ' . $id,
+                'data' => $slide
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -107,7 +183,19 @@ class CategoryArticleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $slide = Slide::findOrFail($id);
+        $slide = [
+            'id' => $slide->id ?? null,
+            'title_en' => $slide->title_en ?? "",
+            'title_kh' => $slide->title_kh ?? "",
+            'description_en' => $slide->description_en ?? "",
+            'description_kh' => $slide->description_kh ?? "",
+            'type' => $slide->type ?? "",
+            'image' => $slide->image ?? "",
+            'status' => $slide->status ?? "",
+            'url' => $slide->url ?? "",
+        ];
+        return view('Admin.AdminMenu.CategoryArticles.form', );
     }
 
     /**
@@ -115,35 +203,50 @@ class CategoryArticleController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         try {
+
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
-                'title_kh' => 'required|string|max:500'
+                'tilte_kh' => 'required|string|max:500',
+                'url' => 'required|string|max:255',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
             if ($validation->failed()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Validation error',
-                    'error' => $validation->errors(),
-                ]);
+                    'message' => 'validation error',
+                    'error' => $validation->errors()
+                ], 422);
             }
 
-            $category_articles = CategoryArticle::find($id);
+            $slide = Slide::find($id);
 
-            if (!$category_articles) {
+            if (!$slide) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Category Article not found with id : ' . $id,
+                    'message' => 'Slide not found with id : ' . $id,
                 ], 404);
             }
 
-            $category_articles->update($request->all());
+            $slide->title_en = $request->title_en;
+            $slide->title_kh = $request->title_kh;
+            $slide->url = $request->url;
+            $slide->type = $request->type ?? $slide->type;
+            $slide->status = $request->status ?? 0;
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $slide['image'] = $imagePath;
+            }
+
+            $slide->save();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Category Article updated successfully',
-                'data' => $category_articles
+                'message' => 'successfully updated slide with id : ' . $id,
+                'data' => $slide
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -159,21 +262,24 @@ class CategoryArticleController extends Controller
     public function destroy(string $id)
     {
         try {
-            $category_articles = CategoryArticle::find($id);
 
-            if (!$category_articles) {
+            $slide = Slide::find($id);
+
+            if (!$slide) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Category Article not found with id : ' . $id,
+                    'message' => 'Slide not found with id : ' . $id,
                 ], 404);
             }
 
-            $category_articles->delete();
+            $slide['status'] = 0;
+
+            $slide->update();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Category Article deleted successfully',
-            ], 200);
+                'message' => 'Slide deleted successfully'
+            ], 204);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

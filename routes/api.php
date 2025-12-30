@@ -27,11 +27,14 @@ Route::get('/admin/slides/create', [SlideController::class, 'create'])->name('sl
 Route::get('/admin/slides/edit/{id}', [SlideController::class, 'edit'])->name('slide.edit');
 
 // CategoryArticle route
-Route::post('/categoryarticles', [CategoryArticleController::class, 'store']);
-Route::get('/categoryarticles', [CategoryArticleController::class, 'index']);
+Route::post('/categoryarticles/add', [CategoryArticleController::class, 'store'])->name('categoryarticles.add');
+Route::get('/categoryarticles', [CategoryArticleController::class, 'index'])->name('categoryarticles.get-data');
 Route::get('/categoryarticles/{id}', [CategoryArticleController::class, 'show']);
-Route::put('/categoryarticles/{id}', [CategoryArticleController::class, 'update']);
+Route::put('/categoryarticles/{id}', [CategoryArticleController::class, 'update'])->name('categoryarticles.update');
 Route::delete('/categoryarticles/{id}', [CategoryArticleController::class, 'destroy']);
+Route::get('/admin/categoryarticles', [CategoryArticleController::class, 'view'])->name('admin.categoryarticles');
+Route::get('/admin/categoryarticles/create', [CategoryArticleController::class, 'create'])->name('categoryarticles.create');
+Route::get('/admin/categoryarticles/edit/{id}', [CategoryArticleController::class, 'edit'])->name('categoryarticles.edit');
 
 
 
