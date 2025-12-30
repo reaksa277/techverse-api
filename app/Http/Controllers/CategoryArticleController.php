@@ -268,7 +268,7 @@ class CategoryArticleController extends Controller
             if (!$category_article) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'category_article not found with id : ' . $id,
+                    'message' => 'Category article not found with id : ' . $id,
                 ], 404);
             }
 

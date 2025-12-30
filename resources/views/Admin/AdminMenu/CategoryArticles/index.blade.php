@@ -76,7 +76,7 @@
                 }).then((result) => {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url('/api/articles') }}/" + id,
+                            url: "{{ url('/api/categoryarticles') }}/" + id,
                             type: "DELETE",
                             success: function(response) {
                                 unblockagePage();
