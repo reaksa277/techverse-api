@@ -14,7 +14,6 @@ class ArticleController extends Controller
         try {
             $baseQuery = DB::table('articles as a')
                 ->join('category_articles as ca', 'a.category_id', '=', 'ca.id')
-                ->where('a.status', 1)
                 ->whereNull('a.deleted_at')
                 ->whereNull('ca.deleted_at')
                 ->select('a.*', 'ca.title_en as category_name');
@@ -305,6 +304,7 @@ class ArticleController extends Controller
             $article['status'] = 0;
 
             $article->update();
+            $article->delete();
 
             return response()->json([
                 'status' => true,
