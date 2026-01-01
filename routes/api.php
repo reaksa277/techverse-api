@@ -16,7 +16,7 @@ Route::prefix('v1')->group(function () {
     require __DIR__.'/api/v1.php';
 });
 // User route
-Route::post('/users', [UserController::class, 'store'])->name('users.add');
+Route::post('/users/add', [UserController::class, 'store'])->name('users.add');
 Route::get('/users', [UserController::class, 'index'])->name('users.get-data');
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::put('/users/{id}', [UserController::class, 'update'])->name('slide.update');

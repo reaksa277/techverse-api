@@ -141,6 +141,7 @@
             if (action === 'clear') {
                 $('#name').val('');
                 $('#email').val('');
+                $('#password').val('');
                 $('#role').val('');
                 $('#status').prop('checked', false);
                 $('#flupld').val('');
@@ -151,6 +152,7 @@
             return {
                 name: $('#name').val(),
                 email: $('#email').val(),
+                password: $('#password').val(),
                 role: $('#role').val(),
                 status: $('#status').is(':checked') ? 1 : 0,
                 thumbnail: $('#flupld')[0].files[0] ?? null
@@ -164,10 +166,10 @@
 
                 formData.append('name', data.name);
                 formData.append('email', data.email);
+                formData.append('password', data.password);
                 formData.append('role', data.role);
                 formData.append('status', data.status);
                 formData.append('thumbnail', data.thumbnail);
-                formData.append('status', data.status);
                 formData.append('image', data.thumbnail);
 
                 $.ajax({

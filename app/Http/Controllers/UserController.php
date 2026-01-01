@@ -21,8 +21,8 @@ class UserController extends Controller
             if ($request->has('search') && !empty($request->search['value'])) {
                 $searchValue = $request->search['value'];
                 $query->where(function ($q) use ($searchValue) {
-                    $q->where('title_kh', 'like', "%$searchValue%")
-                        ->orWhere('title_en', 'like', "%$searchValue%");
+                    $q->where('name', 'like', "%$searchValue%")
+                        ->orWhere('email', 'like', "%$searchValue%");
                 });
             }
 
@@ -46,6 +46,7 @@ class UserController extends Controller
             $query->skip($start)->take($length);
 
             $data = $query->get();
+            dd($data);
 
             return [
                 'draw' => $request->input('draw', 1),
@@ -71,6 +72,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        Log::debug('DataTables request:', $request->all());
         try {
             $user = $this->getDataTable($request);
 
@@ -91,9 +93,10 @@ class UserController extends Controller
         $data = [
             'id' => null,
             'name' => "",
-            'title_kh' => "",
-            'description_en' => "",
-            'description_kh' => "",
+            'email' => "",
+            'role' => "",
+            'status' => "",
+            'image' => "",
         ];
         return view('Admin.AdminMenu.Users.form', compact('data'));
     }
@@ -152,19 +155,19 @@ class UserController extends Controller
     public function show(string $id)
     {
         try {
-            $slide = Slide::find($id);
+            $user = User::find($id);
 
-            if (!$slide) {
+            if (!$user) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : ' . $id,
+                    'message' => 'User not found with id : ' . $id,
                 ], 404);
             }
 
             return response()->json([
                 'status' => true,
-                'message' => 'Successfully get slide with id : ' . $id,
-                'data' => $slide
+                'message' => 'Successfully get user with id : ' . $id,
+                'data' => $user
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
