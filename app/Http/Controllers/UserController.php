@@ -22,8 +22,7 @@ class UserController extends Controller
                 $searchValue = $request->search['value'];
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('title_kh', 'like', "%$searchValue%")
-                        ->orWhere('title_en', 'like', "%$searchValue%")
-                        ->orWhere('type', 'like', "%$searchValue%");
+                        ->orWhere('title_en', 'like', "%$searchValue%");
                 });
             }
 

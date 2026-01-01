@@ -10,11 +10,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Carousel</h5>
+                                <h5 class="m-b-10">User</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Carousel</li>
+                                <li class="breadcrumb-item" aria-current="page">User</li>
                             </ul>
                         </div>
                     </div>
@@ -28,8 +28,8 @@
                     <div class="card table-card">
                         <div class="card-body">
                             <div class="text-end p-4 pb-0">
-                                <a class="btn btn-primary" href="{{ route('slides.create') }}">
-                                    <i class="ti ti-plus f-18"></i> Add Slide
+                                <a class="btn btn-primary" href="{{ route('users.create') }}">
+                                    <i class="ti ti-plus f-18"></i> Add User
                                 </a>
                             </div>
                             <div class="table-responsive">
@@ -109,58 +109,38 @@
                         'orderable': false,
                         'visible': true,
                         render: function(image, type, row) {
-                            return image ?
-                                `<img src="/storage/${image}" width="80" style="border-radius: 8px">` :
-                                '';
+                            return `<img
+                                    src="${image ? `/storage/${image}` : ''}"
+                                    width="80"
+                                    style="border-radius: 8px; display: ${image ? 'block' : 'none'};"
+                                    >`;
                         }
                     },
                     {
-                        'data': 'title_en',
-                        'name': 'title_en',
+                        'data': 'name',
+                        'name': 'name',
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
-                        render: function(title_en, type, row) {
-                            return title_en ? title_en :
+                        render: function(name, type, row) {
+                            return name ? name :
                                 `<span class="text-body-tertiary">N/A</span>`;
                         }
                     },
                     {
-                        'data': 'title_kh',
-                        'name': 'title_kh',
+                        'data': 'email',
+                        'name': 'email',
                         'searchable': true,
                         'orderable': true,
                         'visible': true,
-                        render: function(title_kh, type, row) {
-                            return title_kh ? title_kh :
+                        render: function(email, type, row) {
+                            return email ? email :
                                 `<span class="text-body-tertiary">N/A</span>`;
                         }
                     },
                     {
-                        'data': 'description_en',
-                        'name': 'description_en',
-                        'searchable': true,
-                        'orderable': true,
-                        'visible': true,
-                        render: function(description_en, type, row) {
-                            return description_en ? description_en :
-                                `<span class="text-body-tertiary">N/A</span>`;
-                        }
-                    },
-                    {
-                        'data': 'description_kh',
-                        'name': 'description_kh',
-                        'searchable': false,
-                        'orderable': true,
-                        'visible': true,
-                        render: function(description_kh, type, row) {
-                            return description_kh ? description_kh :
-                                `<span class="text-body-tertiary">N/A</span>`;
-                        }
-                    },
-                    {
-                        'data': 'type',
-                        'name': 'type',
+                        'data': 'role',
+                        'name': 'role',
                         'searchable': true,
                         'orderable': true,
                         'visible': true,

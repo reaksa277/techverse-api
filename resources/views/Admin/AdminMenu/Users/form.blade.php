@@ -11,15 +11,15 @@
                         <div class="col-md-12">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{{ route('admin.slides') }}">Carousel</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Add New Carousel</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.users') }}">User</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Add New User</li>
                             </ul>
                         </div>
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">Add New Carousel
+                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">Add New User
                                 </h2>
-                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">Update Carousel
+                                <h2 class="mb-0 {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">Update User
                                 </h2>
                             </div>
                         </div>
@@ -36,60 +36,28 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-home" type="button" role="tab"
-                                                    aria-controls="pills-home" aria-selected="true">English</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-profile" type="button" role="tab"
-                                                    aria-controls="pills-profile" aria-selected="false">Khmer</button>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                                                aria-labelledby="pills-home-tab" tabindex="0">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="language_en" id="language_en">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Title-en <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" id="title_en"
-                                                                    value="{{ old('title_en', $data['title_en'] ?? '') }}"
-                                                                    name="title_en" placeholder="Enter Title-en" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="form-label"
-                                                                    for="descriptionEn">Description-en</label>
-                                                                <textarea id="description_en" name="description_en" class="summernote">{{ old('description_en', $data['description_en'] ?? '') }}</textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label class="form-label">Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="name"
+                                                        value="{{ old('name', $data['name'] ?? '') }}" name="name"
+                                                        placeholder="Enter Name" required>
                                                 </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-profile" role="tabpanel"
-                                                aria-labelledby="pills-profile-tab" tabindex="0">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="language_kh" id="language_kh">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Title-kh <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" id="title_kh"
-                                                                    value="{{ old('title_kh', $data['title_kh'] ?? '') }}"
-                                                                    name="title_kh" placeholder="Enter Title-kh" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="form-label"
-                                                                    for="descriptionEn">Description-kh</label>
-                                                                <textarea id="description_kh" name="description_kh" class="summernote">{{ old('description_kh', $data['description_kh'] ?? '') }}</textarea>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Email address</label>
+                                                    <input type="email" class="form-control form-control"
+                                                        value="{{ old('email', $data['email'] ?? '') }}" name="email"
+                                                        placeholder="email@company.com">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="password">Password <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="password" class="form-control" id="password"
+                                                        value="{{ old('password', $data['password'] ?? '') }}" name="password"
+                                                        placeholder="Password" required>
+                                                    <small>Your password must be between 8 and 30 characters.</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -98,24 +66,18 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label class="form-label">Type</label>
-                                                    <select class="form-select" id="type" name="type">
-                                                        <option value="carousel"
-                                                            {{ old('type', $data['type'] ?? '') == 'carousel' ? 'selected' : '' }}>
-                                                            Carousel</option>
-                                                        <option value="advertisement"
-                                                            {{ old('type', $data['type'] ?? '') == 'advertisement' ? 'selected' : '' }}>
-                                                            Advertisement</option>
+                                                    <label class="form-label">Role</label>
+                                                    <select class="form-select" id="role" name="role">
+                                                        <option value="admin"
+                                                            {{ old('role', $data['role'] ?? '') == 'admin' ? 'selected' : '' }}>
+                                                            Admin</option>
+                                                        <option value="user"
+                                                            {{ old('role', $data['role'] ?? '') == 'user' ? 'selected' : '' }}>
+                                                            User</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-label">Url</label>
-                                                    <input type="text" class="form-control" id="url"
-                                                        value="{{ old('url', $data['url'] ?? '') }}" name="url"
-                                                        placeholder="Enter url">
-                                                </div>
-                                                <div class="form-group">
-                                                    <p><span class="text-danger">*</span> Article Picture</p>
+                                                    <p>Avatar Picture</p>
 
                                                     <!-- Custom upload button -->
                                                     <label class="btn btn-outline-secondary" for="flupld">
@@ -177,9 +139,9 @@
         function valueFill(action = null) {
 
             if (action === 'clear') {
-                $('#title_en, #title_kh').val('');
-                $('#description_en, #description_kh').val('');
-                $('#type').val('');
+                $('#name').val('');
+                $('#email').val('');
+                $('#role').val('');
                 $('#status').prop('checked', false);
                 $('#flupld').val('');
                 $('#showThumbnail').attr('src', '').hide();
@@ -187,11 +149,9 @@
             }
 
             return {
-                title_en: $('#title_en').val(),
-                title_kh: $('#title_kh').val(),
-                description_en: $('#description_en').val(),
-                description_kh: $('#description_kh').val(),
-                type: $('#type').val(),
+                name: $('#name').val(),
+                email: $('#email').val(),
+                role: $('#role').val(),
                 status: $('#status').is(':checked') ? 1 : 0,
                 thumbnail: $('#flupld')[0].files[0] ?? null
             };
@@ -202,16 +162,16 @@
                 const data = valueFill();
                 let formData = new FormData();
 
-                formData.append('title_en', data.title_en);
-                formData.append('title_kh', data.title_kh);
-                formData.append('description_en', data.description_en);
-                formData.append('description_kh', data.description_kh);
-                formData.append('type', data.type);
+                formData.append('name', data.name);
+                formData.append('email', data.email);
+                formData.append('role', data.role);
+                formData.append('status', data.status);
+                formData.append('thumbnail', data.thumbnail);
                 formData.append('status', data.status);
                 formData.append('image', data.thumbnail);
 
                 $.ajax({
-                    url: "{{ route('slides.add') }}",
+                    url: "{{ route('users.add') }}",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -222,7 +182,7 @@
                             return;
                         }
                         unblockagePage();
-                        window.location.replace("{{ route('admin.slides') }}");
+                        window.location.replace("{{ route('admin.users') }}");
                     },
                     error: function(e) {
                         Msg(e, 'error');
