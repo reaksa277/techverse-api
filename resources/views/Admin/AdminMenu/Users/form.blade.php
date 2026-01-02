@@ -32,7 +32,7 @@
                 <div class="panel-content">
                     <div class="card">
                         <div class="card-body">
-                            <form id="slideForm" enctype="multipart/form-data">
+                            <form id="userForm" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-8">
@@ -56,8 +56,8 @@
                                                     <label class="form-label" for="password">Password <span
                                                             class="text-danger">*</span></label>
                                                     <input type="password" class="form-control" id="password"
-                                                        value="{{ old('password', $data['password'] ?? '') }}" name="password"
-                                                        placeholder="Password" required>
+                                                        value="{{ old('password', $data['password'] ?? '') }}"
+                                                        name="password" placeholder="Password" required>
                                                     <small>Your password must be between 8 and 30 characters.</small>
                                                 </div>
                                             </div>
@@ -77,7 +77,7 @@
                                                             User</option>
                                                     </select>
                                                 </div>
-                                                {{-- <div class="form-group">
+                                                <div class="form-group">
                                                     <p>Avatar Picture</p>
 
                                                     <!-- Custom upload button -->
@@ -92,7 +92,7 @@
                                                     <!-- Preview image -->
                                                     <img id="showThumbnail" style="margin-top:15px;max-height:100px;"
                                                         src="{{ old('image', isset($data['image']) ? asset('storage/' . $data['image']) : '') }}">
-                                                </div> --}}
+                                                </div>
                                                 <div class="form-check form-switch d-flex align-items-center p-0 my-2">
                                                     <label class="form-check-label h5 pe-3 mb-0"
                                                         for="status">Active</label>
@@ -105,8 +105,7 @@
                                     </div>
                                     <!-- Card Footer with buttons -->
                                     <div class="text-end">
-                                        <a href="{{ route('admin.users') }}"
-                                            class="btn btn-outline-secondary">Cancel</a>
+                                        <a href="{{ route('admin.users') }}" class="btn btn-outline-secondary">Cancel</a>
                                         <button id="btnSave" type="button" onclick="save()"
                                             class="btn btn-primary {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">
                                             Save User
@@ -145,6 +144,8 @@
                 $('#password').val('');
                 $('#role').val('');
                 $('#status').prop('checked', false);
+                $('#flupld').val('');
+                $('#showThumbnail').attr('src', '').hide();
                 return;
             }
 
@@ -154,6 +155,7 @@
                 password: $('#password').val(),
                 role: $('#role').val(),
                 status: $('#status').is(':checked') ? 1 : 0,
+                thumbnail: $('#flupld')[0].files[0] ?? null
             };
         }
 
@@ -167,6 +169,7 @@
                 formData.append('password', data.password);
                 formData.append('role', data.role);
                 formData.append('status', data.status);
+                formData.append('image', data.thumbnail);
 
                 $.ajax({
                     url: "{{ route('users.add') }}",
@@ -180,9 +183,9 @@
                             return;
                         }
                         unblockagePage();
-                        console.log("user", response.data);
+                        console.log("User saved:", response.data);
 
-                        window.location.replace("{{ route('admin.users') }}");
+                        // window.location.replace("{{ route('admin.users') }}");
                     },
                     error: function(e) {
                         Msg(e, 'error');
@@ -198,17 +201,16 @@
             const data = valueFill();
             let formData = new FormData();
 
-            formData.append('title_en', data.title_en);
-            formData.append('title_kh', data.title_kh);
-            formData.append('description_en', data.description_en);
-            formData.append('description_kh', data.description_kh);
-            formData.append('type', data.type);
+            formData.append('name', data.name);
+            formData.append('email', data.email);
+            formData.append('password', data.password);
+            formData.append('role', data.role);
             formData.append('status', data.status);
             formData.append('image', data.thumbnail);
 
             formData.append('_method', 'PUT');
             $.ajax({
-                url: "{{ url('/api/slides') }}/" + id,
+                url: "{{ url('/api/users') }}/" + id,
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -219,7 +221,7 @@
                         return;
                     }
                     unblockagePage();
-                    window.location.replace("{{ route('admin.slides') }}");
+                    window.location.replace("{{ route('admin.users') }}");
                 },
                 error: function(e) {
                     Msg(e, 'error');

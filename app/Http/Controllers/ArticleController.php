@@ -6,6 +6,7 @@ use App\Models\Articles;
 use App\Models\CategoryArticle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
 {

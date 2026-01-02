@@ -216,6 +216,7 @@
                 formData.append('type', data.type);
                 formData.append('status', data.status);
                 formData.append('image', data.thumbnail);
+                
                 $.ajax({
                     url: "{{ route('categoryarticles.add') }}",
                     type: "POST",

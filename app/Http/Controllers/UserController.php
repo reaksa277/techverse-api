@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Slide;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -96,6 +95,7 @@ class UserController extends Controller
             'email' => "",
             'password' => "",
             'role' => "",
+            'image' => "",
             'status' => "",
         ];
         return view('Admin.AdminMenu.Users.form', compact('data'));
@@ -112,9 +112,10 @@ class UserController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8',
                 'role' => 'required|in:admin,user',
+                'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
-            if ($validation->failed()) {
+            if ($validation->fails()) {
                 return response()->json(
                     [
                         'status' => 'error',
@@ -124,17 +125,28 @@ class UserController extends Controller
                     422
                 );
             }
-            User::create([
+
+            $imagePath = null;
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')
+                    ->store('images/users', 'public');
+            }
+
+            $data = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => $request->role
+                'role' => $request->role,
+                'image' => $imagePath,
             ]);
+
+            $data->image = $data->image ? asset('storage/' . $data->image) : null;
 
             return response()->json([
                 'status' => 'success',
                 'icon' => 'success',
-                'message' => 'created slide successfullly',
+                'message' => 'created user successfullly',
                 'data' => $this->getDataTable($request),
             ], 201);
         } catch (\Exception $e) {
@@ -178,19 +190,17 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $slide = Slide::findOrFail($id);
-        $slide = [
-            'id' => $slide->id ?? null,
-            'title_en' => $slide->title_en ?? "",
-            'title_kh' => $slide->title_kh ?? "",
-            'description_en' => $slide->description_en ?? "",
-            'description_kh' => $slide->description_kh ?? "",
-            'type' => $slide->type ?? "",
-            'image' => $slide->image ?? "",
-            'status' => $slide->status ?? "",
-            'url' => $slide->url ?? "",
+        $user = User::findOrFail($id);
+        $user = [
+            'id' => $user->id ?? null,
+            'name' => $user->name ?? "",
+            'email' => $user->email ?? "",
+            'password' => $user->password ?? "",
+            'role' => $user->role ?? "",
+            'image' => $user->image ?? "",
+            'status' => $user->status ?? "",
         ];
-        return view('Admin.AdminMenu.Users.form',);
+        return view('Admin.AdminMenu.Users.form', ["data" => $user]);
     }
 
     /**
@@ -202,10 +212,11 @@ class UserController extends Controller
         try {
 
             $validation = Validator($request->all(), [
-                'title_en' => 'required|string|max:500',
-                'tilte_kh' => 'required|string|max:500',
-                'url' => 'required|string|max:255',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:8',
+                'role' => 'required|in:admin,user',
+                'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
             if ($validation->failed()) {
@@ -216,32 +227,37 @@ class UserController extends Controller
                 ], 422);
             }
 
-            $slide = Slide::find($id);
+            $user = User::find($id);
 
-            if (!$slide) {
+            if (!$user) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : ' . $id,
+                    'message' => 'User not found with id : ' . $id,
                 ], 404);
             }
+            // Update fields
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->role = $request->role;
+            $user->status = $request->has('status') ? $request->status : $user->status;
 
-            $slide->title_en = $request->title_en;
-            $slide->title_kh = $request->title_kh;
-            $slide->url = $request->url;
-            $slide->type = $request->type ?? $slide->type;
-            $slide->status = $request->status ?? 0;
-
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images', 'public');
-                $slide['image'] = $imagePath;
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
             }
 
-            $slide->save();
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images/users', 'public');
+                $user->image = $imagePath;
+            }
+
+            $user->save();
+
+            $user->image = $user->image ? asset('storage/' . $user->image) : null;
 
             return response()->json([
                 'status' => true,
-                'message' => 'successfully updated slide with id : ' . $id,
-                'data' => $slide
+                'message' => 'successfully updated user with id : ' . $id,
+                'data' => $user
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -258,18 +274,18 @@ class UserController extends Controller
     {
         try {
 
-            $slide = Slide::find($id);
+            $user = User::find($id);
 
-            if (!$slide) {
+            if (!$user) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Slide not found with id : ' . $id,
+                    'message' => 'user not found with id : ' . $id,
                 ], 404);
             }
 
-            $slide['status'] = 0;
+            $user['status'] = 0;
 
-            $slide->update();
+            $user->update();
 
             return response()->json([
                 'status' => true,

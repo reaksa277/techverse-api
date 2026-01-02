@@ -37,7 +37,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-end">#</th>
-                                            {{-- <th>Image</th> --}}
+                                            <th>Image</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Role</th>
@@ -75,7 +75,7 @@
                 }).then((result) => {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url('/api/slides') }}/" + id,
+                            url: "{{ url('/api/users') }}/" + id,
                             type: "DELETE",
                             success: function(response) {
                                 unblockagePage();
@@ -102,20 +102,18 @@
                             return id;
                         }
                     },
-                    // {
-                    //     'data': 'image',
-                    //     'name': 'image',
-                    //     'searchable': false,
-                    //     'orderable': false,
-                    //     'visible': true,
-                    //     render: function(image, type, row) {
-                    //         return `<img
-                //                 src="${image ? `/storage/${image}` : ''}"
-                //                 width="80"
-                //                 style="border-radius: 8px; display: ${image ? 'block' : 'none'};"
-                //                 >`;
-                    //     }
-                    // },
+                    {
+                        'data': 'image',
+                        'name': 'image',
+                        'searchable': false,
+                        'orderable': false,
+                        'visible': true,
+                        render: function(image, type, row) {
+                            return image ?
+                                `<img src="/storage/${image}" width="80" style="border-radius: 8px">` :
+                                '';
+                        }
+                    },
                     {
                         'data': 'name',
                         'name': 'name',
@@ -160,7 +158,7 @@
                                             <i class="ti ti-menu-2"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/api/admin/slides/edit/${row.id}">
+                                            <a class="dropdown-item" href="/api/admin/users/edit/${row.id}">
                                                 <i class="ti ti-edit"></i> Edit
                                             </a>
                                             <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="destroy(${row.id})">
