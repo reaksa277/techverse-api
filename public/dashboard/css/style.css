@@ -22122,12 +22122,15 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
 }
 .auth-main .auth-wrapper.v3 {
   display: flex;
+  justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
+
 .auth-main .auth-wrapper.v3 .auth-form {
   flex-direction: column;
-  background: url("../images/authentication/img-auth-bg.svg");
-  min-height: 100vh;
+  background: url("/dashboard/images/img-auth-bg.svg");
+  /* min-height: 100vh; */
   padding: 24px;
   background-repeat: no-repeat;
   background-size: auto 75%;
