@@ -37,7 +37,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-end">#</th>
-                                            <th>Image</th>
+                                            {{-- <th>Image</th> --}}
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Role</th>
@@ -102,20 +102,20 @@
                             return id;
                         }
                     },
-                    {
-                        'data': 'image',
-                        'name': 'image',
-                        'searchable': false,
-                        'orderable': false,
-                        'visible': true,
-                        render: function(image, type, row) {
-                            return `<img
-                                    src="${image ? `/storage/${image}` : ''}"
-                                    width="80"
-                                    style="border-radius: 8px; display: ${image ? 'block' : 'none'};"
-                                    >`;
-                        }
-                    },
+                    // {
+                    //     'data': 'image',
+                    //     'name': 'image',
+                    //     'searchable': false,
+                    //     'orderable': false,
+                    //     'visible': true,
+                    //     render: function(image, type, row) {
+                    //         return `<img
+                //                 src="${image ? `/storage/${image}` : ''}"
+                //                 width="80"
+                //                 style="border-radius: 8px; display: ${image ? 'block' : 'none'};"
+                //                 >`;
+                    //     }
+                    // },
                     {
                         'data': 'name',
                         'name': 'name',
@@ -199,8 +199,9 @@
                             }];
                         },
                         error: function(xhr, error, thrown) {
-                            // Handle error if needed
-                            console.error('ERR');
+                            console.error('❌ DataTable AJAX error');
+                            console.log('Status:', xhr.status);
+                            console.log('Response:', xhr.responseText);
                         }
                     },
                     columns: cols,

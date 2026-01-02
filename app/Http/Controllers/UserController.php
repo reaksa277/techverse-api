@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Slide;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
     public function getDataTable(Request $request)
     {
         try {
-            $baseQuery = User::whereNull('deleted_at')->where('status', 1);
+            $baseQuery = User::where('status', 1);
 
             $recordsTotal = $baseQuery->count();
 
@@ -46,7 +48,6 @@ class UserController extends Controller
             $query->skip($start)->take($length);
 
             $data = $query->get();
-            dd($data);
 
             return [
                 'draw' => $request->input('draw', 1),
@@ -72,7 +73,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        Log::debug('DataTables request:', $request->all());
         try {
             $user = $this->getDataTable($request);
 
@@ -94,9 +94,9 @@ class UserController extends Controller
             'id' => null,
             'name' => "",
             'email' => "",
+            'password' => "",
             'role' => "",
             'status' => "",
-            'image' => "",
         ];
         return view('Admin.AdminMenu.Users.form', compact('data'));
     }
@@ -124,16 +124,12 @@ class UserController extends Controller
                     422
                 );
             }
-
-            $data = $request->all();
-
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images', 'public');
-                $data['image'] = $imagePath;
-            }
-            $data = User::create($data);
-
-            $data->image = $data->image ? asset('storage/' . $data->image) : null;
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role
+            ]);
 
             return response()->json([
                 'status' => 'success',

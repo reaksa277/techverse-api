@@ -19,7 +19,7 @@ Route::prefix('v1')->group(function () {
 Route::post('/users/add', [UserController::class, 'store'])->name('users.add');
 Route::get('/users', [UserController::class, 'index'])->name('users.get-data');
 Route::get('/users/{id}', [UserController::class, 'show']);
-Route::put('/users/{id}', [UserController::class, 'update'])->name('slide.update');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 Route::get('/admin/users', [UserController::class, 'view'])->name('admin.users');
 Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');

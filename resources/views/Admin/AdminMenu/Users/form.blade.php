@@ -46,8 +46,9 @@
                                                         placeholder="Enter Name" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-label">Email address</label>
-                                                    <input type="email" class="form-control form-control"
+                                                    <label class="form-label">Email address <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="email" id="email" class="form-control form-control"
                                                         value="{{ old('email', $data['email'] ?? '') }}" name="email"
                                                         placeholder="email@company.com">
                                                 </div>
@@ -76,7 +77,7 @@
                                                             User</option>
                                                     </select>
                                                 </div>
-                                                <div class="form-group">
+                                                {{-- <div class="form-group">
                                                     <p>Avatar Picture</p>
 
                                                     <!-- Custom upload button -->
@@ -91,7 +92,7 @@
                                                     <!-- Preview image -->
                                                     <img id="showThumbnail" style="margin-top:15px;max-height:100px;"
                                                         src="{{ old('image', isset($data['image']) ? asset('storage/' . $data['image']) : '') }}">
-                                                </div>
+                                                </div> --}}
                                                 <div class="form-check form-switch d-flex align-items-center p-0 my-2">
                                                     <label class="form-check-label h5 pe-3 mb-0"
                                                         for="status">Active</label>
@@ -104,15 +105,15 @@
                                     </div>
                                     <!-- Card Footer with buttons -->
                                     <div class="text-end">
-                                        <a href="{{ route('admin.categoryarticles') }}"
+                                        <a href="{{ route('admin.users') }}"
                                             class="btn btn-outline-secondary">Cancel</a>
                                         <button id="btnSave" type="button" onclick="save()"
                                             class="btn btn-primary {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">
-                                            Save Category
+                                            Save User
                                         </button>
                                         <button id="btnUpdate" type="button" onclick="update({{ $data['id'] }})"
                                             class="btn btn-primary {{ isset($data['id']) && $data['id'] ? '' : 'd-none' }}">
-                                            Update Category
+                                            Update User
                                         </button>
                                     </div>
                                 </div>
@@ -144,8 +145,6 @@
                 $('#password').val('');
                 $('#role').val('');
                 $('#status').prop('checked', false);
-                $('#flupld').val('');
-                $('#showThumbnail').attr('src', '').hide();
                 return;
             }
 
@@ -155,7 +154,6 @@
                 password: $('#password').val(),
                 role: $('#role').val(),
                 status: $('#status').is(':checked') ? 1 : 0,
-                thumbnail: $('#flupld')[0].files[0] ?? null
             };
         }
 
@@ -169,8 +167,6 @@
                 formData.append('password', data.password);
                 formData.append('role', data.role);
                 formData.append('status', data.status);
-                formData.append('thumbnail', data.thumbnail);
-                formData.append('image', data.thumbnail);
 
                 $.ajax({
                     url: "{{ route('users.add') }}",
@@ -184,6 +180,8 @@
                             return;
                         }
                         unblockagePage();
+                        console.log("user", response.data);
+
                         window.location.replace("{{ route('admin.users') }}");
                     },
                     error: function(e) {
