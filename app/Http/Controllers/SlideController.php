@@ -114,7 +114,7 @@ class SlideController extends Controller
         try {
             $validation = Validator($request->all(), [
                 'title_en' => 'required|string|max:500',
-                'tilte_kh' => 'required|string|max:500',
+                'title_kh' => 'required|string|max:500',
                 'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 

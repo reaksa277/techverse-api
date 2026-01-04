@@ -183,9 +183,8 @@
                             return;
                         }
                         unblockagePage();
-                        console.log("User saved:", response.data);
 
-                        // window.location.replace("{{ route('admin.users') }}");
+                        window.location.replace("{{ route('admin.users') }}");
                     },
                     error: function(e) {
                         Msg(e, 'error');

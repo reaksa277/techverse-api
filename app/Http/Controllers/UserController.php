@@ -112,7 +112,7 @@ class UserController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8',
                 'role' => 'required|in:admin,user',
-                'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+                // 'image' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
 
             if ($validation->fails()) {
