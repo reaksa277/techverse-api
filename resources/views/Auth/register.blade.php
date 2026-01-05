@@ -6,6 +6,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-end mb-4">
                     <h3 class="mb-0"><b>Register</b></h3>
+                    <a href="{{ route('admin.login') }}" class="link-primary">Already have an account?</a>
                 </div>
                 <form action="">
                     <div class="form-group mb-3">
@@ -20,15 +21,21 @@
                         <label class="form-label">Password</label>
                         <input id="password" type="password" class="form-control" placeholder="Password">
                     </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input id="password_confirmation" type="password" class="form-control"
+                            placeholder="Confirm Password">
+                    </div>
                     <div class="d-flex mt-1 justify-content-between">
                         <div class="form-check">
                             <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="">
                             <label class="form-check-label text-muted" for="customCheckc1">Keep me sign in</label>
                         </div>
-                        <h5 class="text-secondary f-w-400">Forgot Password?</h5>
                     </div>
                     <div class="d-grid mt-4">
-                        <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                        <button type="button" class="btn btn-primary" onclick="register()">
+                            Register
+                        </button>
                     </div>
                 </form>
             </div>
@@ -38,18 +45,19 @@
 
 @section('script')
     <script>
-        $(".form-control").on("input", function () {
+        $(".form-control").on("input", function() {
             $(this).removeClass("is-invalid");
         });
 
-        const login = () => {
-            const BASE_URL = "{{ route('admin.authentication') }}";
+        const register = () => {
+            const BASE_URL = "{{ route('admin.registration') }}";
             const METHOD = "POST";
 
             const formData = new FormData();
             formData.append('name', $("#name").val());
             formData.append('email', $("#email").val());
             formData.append('password', $("#password").val());
+            formData.append('password_confirmation', $("#password_confirmation").val());
             formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
             $.ajax({
@@ -62,21 +70,23 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) {
-                    console.log(response);
+                success: function(response) {
                     if (!response.success) {
                         $(".form-control").removeClass("is-invalid");
 
-                        $.each(response.message, function (field, messages) {
+                        let allErrors = [];
+                        $.each(response.message, function(field, messages) {
                             $("#" + field).addClass("is-invalid");
                             $("#" + field + "Feedback").text(messages[0]);
+                            allErrors = allErrors.concat(messages);
                         });
+                        toast('error', allErrors.join("\n"));
                         return;
                     }
                     toast('success', response.message);
                     window.location.href = "/admin/dashboard";
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     toast('error', error);
                 }
             });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryArticleController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
@@ -11,6 +12,7 @@ Route::prefix('v1')->group(function () {
     require __DIR__.'/api/v1.php';
 });
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
     // User route
     Route::post('/users/add', [UserController::class, 'store'])->name('users.add');
     Route::get('/users', [UserController::class, 'index'])->name('users.get-data');

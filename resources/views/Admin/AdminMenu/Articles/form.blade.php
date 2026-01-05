@@ -192,7 +192,6 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         };
-
         function valueFill(action = null) {
 
             if (action === 'clear') {

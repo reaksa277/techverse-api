@@ -15,8 +15,9 @@ class AuthController extends Controller
         return view('Auth.login');
     }
 
-    public function showRegister() {
-        
+    public function Register()
+    {
+        return view('Auth.register');
     }
 
     public function login(Request $request)
@@ -47,11 +48,13 @@ class AuthController extends Controller
             if (Auth::attempt($request->only('email', 'password'))) {
                 $request->session()->regenerate();
             }
+            $token = $user->createToken('login-token')->plainTextToken;
 
             return response()->json([
                 'success'   => true,
                 'message'   => 'Login successful',
-                'data'      => $user
+                'data'      => $user,
+                'token'     => $token
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -63,30 +66,11 @@ class AuthController extends Controller
 
     public function registration(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name'            => 'required',
-            'email'           => 'required|email',
-            'password'        => 'required',
-            'confirmPassword' => 'required|same:password'
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success'   => false,
-                'message'   => $validator->errors(),
-                'data'      => []
-            ], 201);
-        }
-
-        $user = User::where('email', $request->email)->first();
-
-        if ($user) {
-            return response()->json([
-                'success'   => false,
-                'message'   => ['email' => ['Email has already been taken.']],
-                'data'      => []
-            ], 201);
-        }
 
         $user = User::create([
             'name'     => $request->name,
@@ -94,13 +78,15 @@ class AuthController extends Controller
             'password' => Hash::make($request->password), // Encrypt password
         ]);
 
-//        $token = $user->createToken('auth_token')->plainTextToken;
-        $request->session()->regenerate();
+        Auth::login($user);
+
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'success'   => true,
-            'message'   => 'Registration successful',
-            'data'      => $user
+            'message' => 'User registered successfully',
+            'data' => $user,
+            'access_token' => $token,
+            'token_type' => 'Bearer',
         ], 201);
     }
 

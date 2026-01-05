@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthController::class, 'showLogin']);
-    Route::post('login', [AuthController::class, 'login'])->name('admin.authentication');
+    Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('admin.login');
+    Route::get('/admin/register', [AuthController::class, 'Register'])->name('admin.register');
+    Route::post('/register', [AuthController::class, 'registration'])->name('admin.registration');
+    Route::post('/login', [AuthController::class, 'login'])->name('admin.authentication');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {

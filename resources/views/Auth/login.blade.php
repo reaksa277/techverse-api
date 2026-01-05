@@ -6,6 +6,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-end mb-4">
                     <h3 class="mb-0"><b>Login</b></h3>
+                    <a href="{{ route('admin.register') }}" class="link-primary">Don't have an account?</a>
                 </div>
                 <form action="">
                     <div class="form-group mb-3">
@@ -34,9 +35,11 @@
 
 @section('script')
     <script>
-        $(".form-control").on("input", function () {
+        $(".form-control").on("input", function() {
             $(this).removeClass("is-invalid");
         });
+
+        const API_TOKEN = "{{ session('api_token') }}";
 
         const login = () => {
             const BASE_URL = "{{ route('admin.authentication') }}";
@@ -50,6 +53,10 @@
             $.ajax({
                 url: BASE_URL,
                 type: METHOD,
+                headers: {
+                    'Authorization': 'Bearer ' + API_TOKEN,
+                    'Accept': 'application/json'
+                },
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -57,12 +64,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     if (!response.success) {
                         $(".form-control").removeClass("is-invalid");
 
-                        $.each(response.message, function (field, messages) {
+                        $.each(response.message, function(field, messages) {
                             $("#" + field).addClass("is-invalid");
                             $("#" + field + "Feedback").text(messages[0]);
                         });
@@ -71,7 +78,7 @@
                     toast('success', response.message);
                     window.location.href = "/admin/dashboard";
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     toast('error', error);
                 }
             });
