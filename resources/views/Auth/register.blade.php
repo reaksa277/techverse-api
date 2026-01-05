@@ -5,9 +5,13 @@
         <div class="card my-5">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-end mb-4">
-                    <h3 class="mb-0"><b>Login</b></h3>
+                    <h3 class="mb-0"><b>Register</b></h3>
                 </div>
                 <form action="">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Name</label>
+                        <input id="name" type="name" class="form-control" placeholder="Enter name">
+                    </div>
                     <div class="form-group mb-3">
                         <label class="form-label">Email Address</label>
                         <input id="email" type="email" class="form-control" placeholder="Email Address">
@@ -43,6 +47,7 @@
             const METHOD = "POST";
 
             const formData = new FormData();
+            formData.append('name', $("#name").val());
             formData.append('email', $("#email").val());
             formData.append('password', $("#password").val());
             formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
