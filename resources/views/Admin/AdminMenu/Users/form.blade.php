@@ -135,6 +135,7 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         };
+        let updateRoute = "{{ route('users.update', ':id') }}";
 
         function valueFill(action = null) {
 
@@ -174,6 +175,10 @@
                 $.ajax({
                     url: "{{ route('users.add') }}",
                     type: "POST",
+                    headers: {
+                        Authorization: 'Bearer {{ session('auth_token') }}',
+                        Accept: "application/json",
+                    },
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -208,9 +213,15 @@
             formData.append('image', data.thumbnail);
 
             formData.append('_method', 'PUT');
+
+            let urlUpdate = updateRoute.replace(':id', id);
             $.ajax({
-                url: "{{ url('/api/users') }}/" + id,
+                url: urlUpdate,
                 type: "POST",
+                headers: {
+                    Authorization: 'Bearer {{ session('auth_token') }}',
+                    Accept: "application/json",
+                },
                 data: formData,
                 processData: false,
                 contentType: false,

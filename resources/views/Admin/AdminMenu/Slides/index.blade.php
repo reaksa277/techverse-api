@@ -65,6 +65,9 @@
                 dataList();
             });
 
+            let editRoute = "{{ route('slides.edit', ':id') }}";
+            let deleteRoute = "{{ route('slides.delete', ':id') }}";
+
             function destroy(id) {
                 Swal.fire({
                     title: 'Are you sure?',
@@ -75,10 +78,15 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
+                    let urlDelete = deleteRoute.replace(':id', id);
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url('/api/slides') }}/" + id,
+                            url: urlDelete,
                             type: "DELETE",
+                            headers: {
+                                'Authorization': 'Bearer {{ session('auth_token') }}',
+                                'Accept': 'application/json',
+                            },
                             success: function(response) {
                                 unblockagePage();
                                 window.location.reload();
@@ -182,7 +190,7 @@
                                             <i class="ti ti-menu-2"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/api/admin/slides/edit/${row.id}">
+                                            <a class="dropdown-item" href="${editRoute.replace(':id', row.id)}">
                                                 <i class="ti ti-edit"></i> Edit
                                             </a>
                                             <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="destroy(${row.id})">

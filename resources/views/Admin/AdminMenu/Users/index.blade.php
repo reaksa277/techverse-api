@@ -61,6 +61,8 @@
             $(document).ready(function() {
                 dataList();
             });
+            let editRoute = "{{ route('users.edit', ':id') }}";
+            let deleteRoute = "{{ route('users.delete', ':id') }}";
 
             function destroy(id) {
                 Swal.fire({
@@ -72,10 +74,15 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
+                    let urlDelete = deleteRoute.replace(':id', id);
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url('/api/users') }}/" + id,
+                            url: urlDelete,
                             type: "DELETE",
+                            headers: {
+                                Authorization: 'Bearer {{ session('auth_token') }}',
+                                Accept: "application/json",
+                            },
                             success: function(response) {
                                 unblockagePage();
                                 window.location.reload();
@@ -157,7 +164,7 @@
                                             <i class="ti ti-menu-2"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/api/admin/users/edit/${row.id}">
+                                            <a class="dropdown-item" href="${editRoute.replace(':id', row.id)}">
                                                 <i class="ti ti-edit"></i> Edit
                                             </a>
                                             <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="destroy(${row.id})">
@@ -186,8 +193,8 @@
                         url: "{{ route('users.get-data') }}",
                         type: 'GET',
                         headers: {
-                            'Authorization': 'Bearer {{ session('auth_token') }}',
-                            'Accept': 'application/json',
+                            Authorization: 'Bearer {{ session('auth_token') }}',
+                            Accept: "application/json",
                         },
                         data: function(d) {
                             d.draw = d.draw;

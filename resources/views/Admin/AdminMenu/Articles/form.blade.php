@@ -11,7 +11,7 @@
                         <div class="col-md-12">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{{ route('admin.article') }}">Aritcle</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.articles') }}">Aritcle</a></li>
                                 <li class="breadcrumb-item" aria-current="page">Add New Aritcle</li>
                             </ul>
                         </div>
@@ -161,7 +161,7 @@
                                     </div>
                                     <!-- Card Footer with buttons -->
                                     <div class="text-end">
-                                        <a href="{{ route('admin.article') }}"
+                                        <a href="{{ route('admin.articles') }}"
                                             class="btn btn-outline-secondary">Cancel</a>
                                         <button id="btnSave" type="button" onclick="save()"
                                             class="btn btn-primary {{ isset($data['id']) && $data['id'] ? 'd-none' : '' }}">
@@ -242,7 +242,7 @@
                 formData.append('image', data.thumbnail);
 
                 $.ajax({
-                    url: "{{ route('article.add') }}",
+                    url: "{{ route('articles.add') }}",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -253,7 +253,7 @@
                             return;
                         }
                         unblockagePage();
-                        window.location.replace("{{ route('admin.article') }}");
+                        window.location.replace("{{ route('admin.articles') }}");
                     },
                     error: function(e) {
                         Msg(e, 'error');
@@ -293,7 +293,7 @@
                         return;
                     }
                     unblockagePage();
-                    window.location.replace("{{ route('admin.article') }}");
+                    window.location.replace("{{ route('admin.articles') }}");
                 },
                 error: function(e) {
                     Msg(e, 'error');

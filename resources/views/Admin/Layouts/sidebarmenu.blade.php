@@ -19,7 +19,7 @@
                 <i class="ti ti-dashboard"></i>
             </li>
             <li class="pc-item">
-                <a href="{{ route('admin.article') }}" class="pc-link">
+                <a href="{{ route('admin.articles') }}" class="pc-link">
                     <span class="pc-micon"><i class="ti ti-file-text"></i></span>
                     <span class="pc-mtext">Articles</span>
                 </a>

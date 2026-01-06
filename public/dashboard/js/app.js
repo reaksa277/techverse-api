@@ -8,10 +8,17 @@ const toast = (icon, msg) => {
         didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
-        }
+        },
     });
     Toast.fire({
         icon: icon,
-        title: msg
+        title: msg,
     });
-}
+};
+
+$.ajaxSetup({
+    headers: {
+        Authorization: 'Bearer {{ session("auth_token") }}',
+        Accept: "application/json",
+    },
+});

@@ -198,7 +198,7 @@ class SlideController extends Controller
             'status' => $slide->status ?? "",
             'url' => $slide->url ?? "",
         ];
-        return view('Admin.AdminMenu.Slides.form', );
+        return view('Admin.AdminMenu.Slides.form', ["data" => $slide]);
     }
 
     /**
@@ -206,7 +206,6 @@ class SlideController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         try {
 
             $validation = Validator($request->all(), [

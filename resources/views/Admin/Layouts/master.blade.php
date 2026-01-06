@@ -87,11 +87,12 @@
 
     <!-- Summernote JS -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+    <script src="{{ asset('dashboard/js/app.js') }}"></script>
 
     <!-- Page-specific scripts -->
 
     @yield('script')
-    
+
     <script>
         $(document).ready(function() {
             $('.summernote').summernote();
