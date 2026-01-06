@@ -49,7 +49,7 @@ class AuthController extends Controller
                 $request->session()->regenerate();
             }
             $token = $user->createToken('login-token')->plainTextToken;
-
+            session(['auth_token'=>$token]);
             return response()->json([
                 'success'   => true,
                 'message'   => 'Login successful',

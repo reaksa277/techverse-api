@@ -200,6 +200,10 @@
                     ajax: {
                         url: "{{ route('categoryarticles.get-data') }}",
                         type: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer {{ session('auth_token') }}',
+                            'Accept': 'application/json',
+                        },
                         data: function(d) {
                             d.draw = d.draw;
                             d.start = d.start;
