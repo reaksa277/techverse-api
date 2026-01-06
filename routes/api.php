@@ -12,7 +12,7 @@ Route::prefix('v1')->group(function () {
     require __DIR__ . '/api/v1.php';
 });
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', action: [AuthController::class, 'logout'])->name('admin.logout');
+    
     // User route
     Route::get('/users', [UserController::class, 'index'])->name('users.get-data');
     Route::post('/users/add', [UserController::class, 'store'])->name('users.add');

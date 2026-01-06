@@ -161,10 +161,11 @@
                             <i class="ti ti-wallet"></i>
                             <span>Billing</span>
                         </a>
-                        <a href="{{ route('admin.logout') }}" class="dropdown-item">
+                        <a href="#" onclick="$('#form_logout').submit()" class="dropdown-item">
                             <i class="ti ti-power"></i>
                             <span>Logout</span>
                         </a>
+                        <form id="form_logout" action="{{ route('admin.logout') }}" method="post">@csrf</form>
                     </div>
                     <div class="tab-pane fade" id="drp-tab-2" role="tabpanel" aria-labelledby="drp-t2"
                         tabindex="0">
